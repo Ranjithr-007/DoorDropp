@@ -1,0 +1,145 @@
+{% extends 'delivery_agent/base_agent.html' %}
+
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="order-table">
+            <h3>DELIVERY INFO</h3>
+            <table class="table order-info-business-row">
+                <thead>
+                <tr style="border-bottom: 1px solid #e2e2e2;">
+                    <th scope="col">SL NO</th>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Shop</th>
+                    <th scope="col">Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in delivery_object.picked_orders.all %}
+                    <tr>
+                        <th style="font-weight: normal;">{{forloop.counter}}</th>
+                        <td>{{i.order_id}}</td>
+                        <td>{{i.business.name}}</td>
+                        <td>{{i.order_amount}}</td>
+                    </tr>
+                {% endfor %}
+                <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                    <th scope="row"></th>
+                    <td colspan="2" style="font-weight: 600;">Total No of Order</td>
+                    <td style="font-weight: 600;">{{delivery_object.picked_orders.all.count}}</td>
+                </tr>
+                <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                    <th scope="row"></th>
+                    <td colspan="2" style="font-weight: 600;">Total Order Amount</td>
+                    <td style="font-weight: 600;">{{delivery_object.total_user_orders_amount}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+
+        <div class="details-table">
+            <h3>DELIVERY DETAILS</h3>
+            <div class="order-details-section">
+                <div class="details-text">
+                    <div class="row">
+                        <div class="col-4 col-lg-3"><h5>Name</h5></div>
+                        <div class="col-8 col-lg-9"><h6>: {{delivery_object.common_user.name}}</h6></div>
+                        <div class="col-4 col-lg-3"><h5>Mobile</h5></div>
+                        <div class="col-8 col-lg-9">
+                            <h6>: {{delivery_object.common_user.mobile}} &nbsp;&nbsp;
+                                <span>
+                                    <a href="tel:+91{{delivery_object.common_user.mobile}}">
+                                        <i class="fa fa-phone"></i>
+                                    </a>
+                                </span>
+                            </h6>
+                        </div>
+                        <div class="col-4 col-lg-3"><h5>Address</h5></div>
+                        <div class="col-8 col-lg-9"><h6>: {{delivery_object.common_user.address}}, <br>&nbsp;&nbsp;{{delivery_object.common_user.landmark}}</h6></div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-9 col-lg-3"><h5>Estimate Delivery Charge</h5></div>
+                        <div class="col-3 col-lg-9"><h6>: {{delivery_object.delivery_charge}}</h6></div>
+                        <div class="col-9 col-lg-3"><h5>Total Amount to be collected</h5></div>
+                        <div class="col-3 col-lg-9"><h6>: {{delivery_object.total_amount_to_collect}}</h6></div>
+                    </div>
+                    {% if delivery_object.status == 2 %}
+                        <form id="idForm" action="{% url 'agent_delivery_info' delivery=delivery_object.id %}" method="post">
+                        {% csrf_token %}
+                            <div class="row mt-3">
+                                <div class="col-4 col-lg-3"><h5>Payment Methods</h5></div>
+                                <div class="col-8 col-lg-9">
+                                    <select aria-label="Default select example" class="form-select" name="payment_method" id="id_payment_method" required>
+                                        {% for k in all_payment_methods %}
+                                            {% if k.is_upi and k.qr_code %}
+                                                <option value="{{k.id}}" name="{{k.is_upi}}" title="{{k.qr_code.url}}">{{k.name}}</option>
+                                            {% else %}
+                                                <option value="{{k.id}}" name="{{k.is_upi}}">{{k.name}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <div id="divIdShowQr" class="m-2" style="display:none; font-size:13px;">
+                                        <a href="" style="text-decoration:none;" id="idShowQr">Show QR Code</a>
+                                    </div>
+                                    <div class="details-btn">
+                                        {% if delivery_object.picked_orders.all.count == delivery_object.orders.all.count %}
+                                            <button class="btn btn-primary" type="submit" onclick="return confirm('Are you sure to confirm this delivery and payment?')">Confirm</button>
+                                        {% else %}
+                                            <button class="btn btn-primary" type="button" onclick="alert('Some orders are still open, please pick them all to confirm the delivery');">Confirm</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3" style="background-color:#faf2c8;">
+                                <div class="col-2 col-lg-2"><h5>Status</h5></div>
+                                <div class="col-10 col-lg-10">
+                                    <p style="font-size:13px;">Delivery Order {{delivery_object.delivery_id}} is yet to be delivered</p>
+                                    {% if delivery_object.picked_orders.all.count != delivery_object.orders.all.count %}
+                                        <p style="font-size:13px;">Some orders are still open, please pick them all to confirm the delivery</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    {% elif delivery_object.status == 3 %}
+                        <div class="row mt-3">
+                            <div class="col-4 col-lg-3"><h5>Payment Method</h5></div>
+                            <div class="col-8 col-lg-9">
+                                <p>{{delivery_object.payment_method.name}}</p>
+                            </div>
+                        </div>
+                        <div class="row pt-3" style="background-color:#cdfac8;">
+                            <div class="col-2 col-lg-2"><h5>Status</h5></div>
+                            <div class="col-10 col-lg-10">
+                                <p style="font-size:13px;">Delivery order completed</p>
+                            </div>
+                        </div>
+                    {% elif delivery_object.status == 4 %}
+                        <div class="row mt-3">
+                            <div class="col-4 col-lg-3"><h5>Payment Method</h5></div>
+                            <div class="col-8 col-lg-9">
+                                <p>{{delivery_object.payment_method.name}}</p>
+                            </div>
+                        </div>
+                        <div class="row pt-3" style="background-color:#facfc8;">
+                            <div class="col-2 col-lg-2"><h5>Status</h5></div>
+                            <div class="col-10 col-lg-10">
+                                <p style="font-size:13px;">Failed to complete delivery order</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/delivery_agent/delivery_info.js' %}"></script>
+{% endblock %}

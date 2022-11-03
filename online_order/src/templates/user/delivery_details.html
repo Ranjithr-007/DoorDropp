@@ -1,0 +1,214 @@
+{% extends 'user/base_user.html' %}
+{% load static %}
+{% block content %}
+
+<section class="pt-3">
+    <div class="container">
+        <div class="agent-order-section top-radius">
+            <div class="agent-id-section top-radius">
+                <h4>DELIVERY DETAILS</h4>
+            </div>
+            {% if delivery_object.status > 1 %}
+                <div class="track-table">
+                    <table class="table order-info-business-row">
+                        <thead>
+                        <tr style="border-bottom: 1px solid #e2e2e2;">
+                            <th scope="col">SL NO</th>
+                            <th scope="col">OD ID</th>
+                            <th scope="col">SHOP</th>
+                            <th scope="col"><i class="fas fa-rupee-sign" style="color: #000;"></i>AMOUNT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in delivery_object.picked_orders.all %}
+                        <tr>
+                            <th style="font-weight: normal;">{{forloop.counter}}</th>
+                            <td><a href="{% url 'order_details' order=i.id %}" style="text-decoration:none;">{{i.order_id}}
+                                ({{i.order_total_items}})</a></td>
+                            <td>{{i.business.name}}</td>
+                            <td>{{i.order_amount}}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                            <th></th>
+                            <td style="font-weight: 600;">Total No of Order</td>
+                            <td style="font-weight: 600;">{{delivery_object.picked_orders.all.count}}</td>
+                            <td></td>
+                        </tr>
+                        <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                            <th scope="row"></th>
+                            <td colspan="2" style="font-weight: 600;">Total Order Amount</td>
+                            <td style="font-weight: 600;">{{delivery_object.total_user_orders_amount}}</td>
+                        </tr>
+                        <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                            <th scope="row"></th>
+                            <td colspan="2" style="font-weight: 600;">Estimated Delivery</td>
+                            <td style="font-weight: 600;">{{delivery_object.delivery_charge}}</td>
+                        </tr>
+                        <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                            <th scope="row"></th>
+                            <td colspan="2" style="font-weight: 600;">Total Amount to Pay</td>
+                            <td style="font-weight: 600;">{{delivery_object.total_amount_to_collect}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="track-table">
+                    <table class="table order-info-business-row">
+                        <thead>
+                        <tr style="border-bottom: 1px solid #e2e2e2;">
+                            <th scope="col">SL NO</th>
+                            <th scope="col">OD ID</th>
+                            <th scope="col">SHOP</th>
+                            <th scope="col"><i class="fas fa-rupee-sign" style="color: #000;"></i>AMOUNT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in delivery_object.orders.all %}
+                        <tr>
+                            <th style="font-weight: normal;">{{forloop.counter}}</th>
+                            <td><a href="{% url 'order_details' order=i.id %}" style="text-decoration:none;">{{i.order_id}}
+                                ({{i.order_total_items}})</a></td>
+                            <td>{{i.business.name}}</td>
+                            <td>{{i.order_amount}}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                            <th></th>
+                            <td style="font-weight: 600;">Total No of Order</td>
+                            <td style="font-weight: 600;">{{delivery_object.orders.all.count}}</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="p-2" style="background-color:#fad0cd;">
+                        <p style="font-size:12px;">Delivery agents have not yet responded to your order (s). You will be notified when assigned</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <div class="container ">
+        <div class="track-info-sec">
+            {% if delivery_object.status > 1 %}
+                <div class="track-id-section">
+                    <h4>DELIVERY INFO</h4>
+                </div>
+                <div class="delivery-text">
+                    {% if delivery_object.status == 3 %}
+                        <h4>Your order(s) are delivered by {{delivery_object.delivery_agent.name}}</h4>
+                    {% else %}
+                        <h4>Your order(s) will be delivered by {{delivery_object.delivery_agent.name}}</h4>
+                    {% endif %}
+                    <h4>Want to Contact {{delivery_object.delivery_agent.name}}?&nbsp;&nbsp; <a href="tel:+91{{delivery_object.delivery_agent.mobile}}" style="text-decoration:none;">Click Here</a></h4>
+                    {% if delivery_object.payment_method %}
+                        <h4>Payment Method is {{delivery_object.payment_method.name}}</h4>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container tracking-section">
+        <div class="track">
+            <div class="agent-id-section top-radius">
+                <h4>Tracking Order No - {{delivery_object.delivery_id}}</h4>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="bg-white p-2 px-3">
+                        <div class="d-flex flex-row justify-content-between align-items-center order">
+                            <div class="d-flex flex-column order-details">
+                                {% if delivery_object.status == 1 %}
+                                    <span style="font-size:13px;">Waiting for the response of delivery agents</span>
+                                {% elif delivery_object.status == 2 %}
+                                    <span style="font-size:13px;">Your delivery order is processing</span>
+                                {% elif delivery_object.status == 3 %}
+                                    <span style="font-size:13px;">Your delivery order has been completed</span>
+                                    <span class="date">{{delivery_object.delivered_time|date:'j/N/y, h:i A'}}</span>
+                                {% elif delivery_object.status == 4 %}
+                                    <span style="font-size:13px;">Your delivery order is delayed</span>
+                                {% endif %}
+                            </div>
+                            <div class="tracking-details">
+                                <button class="btn btn-outline-primary btn-sm" id="idBtnTrackOrder" type="button">Track</button>
+                            </div>
+                        </div>
+                        <div id="divIdTrackOrder" style="display:none;">
+                            <hr class="divider mb-4">
+                            <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                {% if delivery_object.status > 1 %}
+                                    <span class="dot"></span>
+                                    <hr class="flex-fill track-line">
+                                    <span class="dot"></span>
+                                    <hr class="flex-fill track-line">
+                                    {% if delivery_object.status == 3 %}
+                                        <span class="dot"></span>
+                                        <hr class="flex-fill track-line">
+                                        <span class="d-flex justify-content-center align-items-center big-dot dot">
+                                            <i class="fa fa-check text-white"></i>
+                                        </span>
+                                    {% elif delivery_object.status == 2 %}
+                                        <span class="dot"></span>
+<!--                                        <hr class="flex-fill track-line">-->
+                                    {% elif delivery_object.status == 4 %}
+                                        <span class="dot"></span>
+<!--                                        <hr class="flex-fill track-line">-->
+                                    {% endif %}
+                                {% else %}
+                                    <span class="dot"></span>
+                                    <hr class="flex-fill track-line">
+                                {% endif %}
+                            </div>
+                            <div class="tracking-step d-flex flex-row justify-content-between align-items-center">
+                                {% if delivery_object.status > 1 %}
+                                    <div class="d-flex flex-column align-items-start">
+                                        <span>{{delivery_object.created|date:'j N'}}</span><span>Order Placed</span>
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <span>{{delivery_object.pickup_time|date:'j N'}}</span><span>Order Picked</span>
+                                    </div>
+                                    {% if delivery_object.status == 3 %}
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <span>{{delivery_object.pickup_time|date:'j N'}}</span><span>Delivery Processing</span>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-end">
+                                            <span>{{delivery_object.delivered_time|date:'j N'}}</span><span>Delivered</span>
+                                        </div>
+                                    {% elif delivery_object.status == 2 %}
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <span>{{delivery_object.pickup_time|date:'j N'}}</span><span>Delivery Processing</span>
+                                        </div>
+                                    {% elif delivery_object.status == 4 %}
+                                        <div class="d-flex flex-column justify-content-center align-items-center">
+                                            <span>{{delivery_object.created|date:'j N'}}</span><span>Delivery Delayed</span>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="d-flex flex-column align-items-start">
+                                        <span>{{delivery_object.created|date:'j N'}}</span><span>Order Placed</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script>
+    $("#idBtnTrackOrder").click( function(){
+        $("#divIdTrackOrder").toggle();
+    });
+</script>
+{% endblock %}

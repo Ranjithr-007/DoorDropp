@@ -1,0 +1,158 @@
+
+{% extends 'sys_admin/base_admin.html' %}
+{% load static %}
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    {% endblock styles %}
+
+    {% block content %}
+
+
+    <!-- message ----------------------->
+    <div class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="alert-box">
+            <div class="alert alert-warning">
+                <label id="idErrorLabel"></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row box-wrap">
+            <!-- new column 1 added for user form -  user registartion form-->
+            <div class="col-lg-6 col-md-8 col-sm-12">
+
+                <!-- user registration form ----------------------------------->
+                <div class="bg-white regis-box" id="divIdContent">
+                    <form action="{% url 'addUnit' %}" id="idForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-box"><!-- form box-->
+                            <div class="reg-wrap">
+                                <h3 class="reg-text">
+                                    Add Units
+                                </h3>
+                                <hr>
+                            </div>
+
+                            <div class="form-group"> <!-- start of user reg form -->
+                                <div class="form-row"> <!-- form row1 -->
+                                    <div class="col-lg-6 col-md-6 frm_fld">
+                                        <label for="{{form.name.id_for_label}}">Name</label><span class="red_star">*</span>
+                                        <input type="text" placeholder="Kilogram" name="{{form.name.name}}" id="{{form.name.id_for_label}}" maxlength="25" class="form-control" required>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 frm_fld">
+                                        <label for="{{form.short_name.id_for_label}}">Short Name</label><span class="red_star">*</span>
+                                        <input type="text" placeholder="KG" name="{{form.short_name.name}}" id="{{form.short_name.id_for_label}}" maxlength="10" class="form-control" required>
+                                    </div>
+
+                                </div><!-- end of form row1 -->
+
+                                <input type="hidden" name="key" id="id_key">
+
+                            </div><!-- end  of user reg form -->
+
+                            <!-- save button -->
+                            <div class="btn-box-wrap">
+                                <button type="submit" id="idSave" class="btn btn-regis">Save</button>
+                            </div>
+
+                        </div><!-- end of form box-->
+                    </form>
+                </div><!-- end of user reg form-->
+                
+            </div><!-- end of new column 1 added for user form-->
+
+            <div class="overlay">
+                <div style="position: absolute;top: 40%;left: 50%;">
+                    <i class="fa fa-spinner fa-spin fa-5x" id="id_loader"></i>
+                </div>
+            </div>
+
+        </div> <!-- end of row1 -->
+
+
+        <div class="row datatablerow"> <!-- start of row2 -->
+            <!-- user table-------------------------------------->
+            <div class="col-12 userpage_table pb-4">
+                    <!--<div class="">-->
+                            <h4 class="table_name">Saved Units</h4>
+                            <hr>
+<!--                            &lt;!&ndash; searchbar-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+<!--                            <div class="row searchbar_row"> &lt;!&ndash; start of row &ndash;&gt;-->
+<!--                                <div class="col-lg-4 col-md-6 float-right">-->
+<!--                                    <div class="input-group">-->
+<!--                                        <input type="search" class="form-control search table_search" aria-label="Search.." placeholder="Enter unit here.." >-->
+<!--                                        <div class="input-group-append">-->
+<!--                                            <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div> &lt;!&ndash; end of row &ndash;&gt;-->
+
+                            <table id="id_data_table" class="table table-hover bg-white">
+
+                                <thead class="br-bottom" style="background-color: #E5ECF0;">
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Short Name</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for emp in all_units %}
+                                    <tr class="br-bottom clear">
+                                        <td class="name">{{ emp.name }}</td>
+                                        <td class="name">{{ emp.short_name }}</td>
+                                        <td>
+                                            <label class="switch">
+                                                {% if emp.is_active %}
+                                                    <a href="{% url 'disableUnit' pk=emp.id %}" onclick="return confirm('Are you sure want to disable the Unit?')">
+                                                        <input type="checkbox" checked >
+                                                        <span class="slider round mb-1"></span>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'enableUnit' pk=emp.id %}" onclick="return confirm('Are you sure want to enable the Unit?')">
+                                                        <input type="checkbox">
+                                                        <span class="slider round mb-1"></span>
+                                                    </a>
+                                                {% endif %}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <span class="">
+                                                <img src='{% static "img/edit.svg" %}' id="{{ emp.id }}" class="edit-icon-menu" title="Edit Unit">
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'deleteUnit' pk=emp.id %}" onclick="return confirm('Are you sure want to delete this Unit?');" title="Delete Unit">
+                                                <span class="fa fa-trash mt-1" style="color: #e04141;"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                    <!-- </div> -->
+
+            </div><!-- end of user table-->
+
+        </div> <!-- end of row2 -->
+
+    </div><!--end of container -->
+
+    {% load static %}
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/DataTables-1.10.24/js/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'js/sys_admin/add_units.js' %}"></script>
+
+{% endblock %}

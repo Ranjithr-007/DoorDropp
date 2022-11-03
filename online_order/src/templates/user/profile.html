@@ -1,0 +1,160 @@
+{% extends 'user/base_user.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .panel100{
+        width: 100%;
+        box-sizing: border-box;
+        background: #f1d5d5;
+        height: auto;
+        border: 1px solid #f1b2a6;
+        box-shadow: 1px 1px 5px rgba(100,100,100,.1);
+        display: none;
+    }
+
+    #errorContainer{
+        display:none;
+    }
+
+    #errorContainer ul{
+        list-style-type: none;
+        display: block;
+        padding: 10px;
+        margin: 0px;
+    }
+
+    #errorContainer li{
+        font-size: 12px;
+        list-style-type: none;
+        display: list-item;
+    }
+
+    #errorContainer li label{
+        margin: 0px;
+    }
+
+    .error{
+        color: #af2206;
+    }
+
+    .error-valid{
+        border: 1px solid #af2206;
+    }
+
+    .success-valid{
+        border: 1px solid #00940f;
+    }
+
+    #errorContainer label {
+        padding-top: 0px;
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .red_star{
+        color:#d94848;
+    }
+</style>
+
+<section>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="profile-section">
+                <div class="profile-details">
+                    <div class="panel100">
+                    <!--Mandatory Common Error Display Div-->
+                        <div id="errorContainer">
+                            <ul id="error_list"></ul>
+                        </div><!-- Jquery Validator Container -->
+                    </div>
+                    <div class="profile-img">
+                        <div class="text-center">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+<!--                        <div class="text-center">-->
+<!--                            <p>{{common_user.email}}</p>-->
+<!--                        </div>-->
+                    </div>
+                    <form action="{% url 'user_profile' %}" id="idForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <script>
+                            var default_village_id = "{{common_user.area_specified.village.id}}";
+                            var default_area_id = "{{common_user.area_specified.id}}";
+                        </script>
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-lg-6 pro-pad">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label for="{{form.name.id_for_label}}">Name<span class="red_star">*</span></label>
+                                    <input class="form-control" type="text" maxlength="100" name="{{form.name.name}}" id="{{form.name.id_for_label}}" value="{{form.name.value}}" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-6 pro-pad">
+                                <div class="form-group">
+                                    <label for="{{form.mobile.id_for_label}}">Mobile Number<span class="red_star">*</span></label>
+                                    <input class="form-control" type="text" minlength="10" maxlength="10" name="{{form.mobile.name}}" id="{{form.mobile.id_for_label}}" value="{{form.mobile.value}}" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-lg-12 pro-pad">
+                                <div class="form-group">
+                                    <label for="{{form.email.id_for_label}}">Email</label>
+                                    <input class="form-control" type="email" name="{{form.email.name}}" id="{{form.email.id_for_label}}" value="{{form.email.value}}">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-lg-12 pro-pad">
+                                <div class="form-group">
+                                    <label for="{{form.landmark.id_for_label}}">Landmark<span class="red_star">*</span></label>
+                                    {% if form.landmark.value and form.landmark.value != 'None' %}
+                                        <input class="form-control" maxlength="250" id="{{form.landmark.id_for_label}}" name="{{form.landmark.name}}" value="{{form.landmark.value}}" type="text" required>
+                                    {% else %}
+                                        <input class="form-control" maxlength="250" id="{{form.landmark.id_for_label}}" name="{{form.landmark.name}}" placeholder="Landmark" value="" type="text" required>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-lg-12 pro-pad">
+                                <label class="form-label" for="{{form.address.id_for_label}}">Address<span class="red_star">*</span></label>
+                                {% if form.address.value and form.address.value != 'None' %}
+                                    <input class="form-control" maxlength="2000" id="{{form.address.id_for_label}}" name="{{form.address.name}}" value="{{form.address.value}}" type="text" required>
+                                {% else %}
+                                    <input class="form-control" maxlength="2000" id="{{form.address.id_for_label}}" placeholder="No.22, Main St, New York" name="{{form.address.name}}" value="" type="text" required>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-6 pro-pad">
+                                <div class="form-group">
+                                    <label for="id_village">Village / Municipality<span class="red_star">*</span></label>
+                                    <select aria-hidden="true" class="form-control select2 select2-hidden-accessible"
+                                            style="width: 100%;" tabindex="-1" name="village" id="id_village" required>
+                                        {% for i in all_village %}
+                                            {% if common_user.area_specified.village.id == i.id %}
+                                                <option value="{{i.id}}" selected>{{i.village}}</option>
+                                            {% else %}
+                                                <option value="{{i.id}}">{{i.village}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-6 pro-pad">
+                                <div class="form-group">
+                                    <label for="id_area_specified">Area / Locality<span class="red_star">*</span></label>
+                                    <select aria-hidden="true" class="form-control select2 select2-hidden-accessible" required
+                                            style="width: 100%;" tabindex="-1" name="area_specified" id="id_area_specified">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pro-btn text-center">
+                            <button class="btn btn-primary" type="submit">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/common/jquery.validate.js' %}"></script>
+<script src="{% static 'js/user/profile.js' %}"></script>
+{% endblock %}

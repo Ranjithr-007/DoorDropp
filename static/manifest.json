@@ -1,0 +1,26 @@
+{
+	"author": "IzadoSolutions",
+	"name": "DoorDropp",
+	"short_name": "DoorDropp",
+	"description": "Order from your favourite shop in your locality and we deliver in your doorstep",
+	"orientation": "portrait",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#FFF",
+	"theme_color": "#1DA1DB",
+	"icons": [
+		{
+			"src": "/static/img/manifest_icon.png",
+			"sizes": "150x150",
+			"type": "image/png"
+		}
+	],
+	"manifest_version": 2,
+	"version": "0.1",
+	"applications": {
+		"gecko": {
+			"id": "ehzaan.at@izado.in"
+		}
+	}
+}

@@ -1,0 +1,84 @@
+{% extends 'business/base_business.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .myorder-search select {
+        border: 1px solid #c4c4c4;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 3px 5px;
+        width: 100%;
+        font-size: 12px;
+    }
+    .my-orders .order-pending,
+    .my-orders .order-cancel,
+    .my-orders .order-success{
+        height:auto;
+        margin: 0px;
+    }
+</style>
+
+<section>
+    <div class="container">
+        <div class="myorder-search">
+            <form action="{% url 'business_transactions' %}" id="idForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row m-1">
+                    <div class="col-6 col-sm-6 col-lg-6">
+                        <div class="date-section">
+                            <label for="id_date_from">Date From</label>
+                            <input id="id_date_from" class="w-100" name="date_from" type="date">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-6">
+                        <div class="date-section">
+                            <label for="id_date_to">Date To</label>
+                            <input id="id_date_to" class="w-100" name="date_to" type="date">
+                        </div>
+                    </div>
+                    <div class="order-btn text-center">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+<section>
+    <div class="container">
+        <div class="my-orders">
+            <div class="row">
+                {% for i in all_transactions %}
+                    {% if i.is_completed %}
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <div class="order-success mb-2">
+                                <div class="row">
+                                    <div class="col-6 col-lg-6"><h4>{{i.transaction_id}}</h4></div>
+                                    <div class="col-6 col-lg-6"><h4 style="text-align:right;">{{i.created|date:'j-N-Y'}}</h4></div>
+                                    <div class="col-6 col-lg-6"><h4>Total Amount : {{i.total_amount}}</h4></div>
+                                    <div class="col-6 col-lg-6"><h4 style="text-align:right;">Your Amount : {{i.amount}}</h4></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <div class="order-pending mb-2">
+                                <div class="row">
+                                    <div class="col-6 col-lg-6"><h4>{{i.transaction_id}}</h4></div>
+                                    <div class="col-6 col-lg-6"><h4 style="text-align:right;">{{i.created|date:'j-N-Y'}}</h4></div>
+                                    <div class="col-6 col-lg-6"><h4>Total Amount : {{i.total_amount}}</h4></div>
+                                    <div class="col-6 col-lg-6"><h4 style="text-align:right;">Your Amount : {{i.amount}}</h4></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+    {% load pwa %}
+    {% load static %}
+    <head>
+        <title>DoorDropp</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta content="ie=edge" http-equiv="X-UA-Compatible">
+        {% progressive_web_app_meta %}
+        <!-- Enables 'Add to Home screen' for Android -->
+        <meta name="viewport" content="width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+<!--        <link rel="icon" sizes="192x192" href="{% static 'favicon.ico' %}">-->
+        <link rel="mainfest" href="{% static 'manifest.json' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
+        <!-- Bootstrap CSS -->
+        <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+              integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+
+        <!-- GOOGLE FONTS -->
+        <link href="https://fonts.gstatic.com" rel="preconnect">
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+              rel="stylesheet">
+
+        <!-- Font awesome -->
+        <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+              integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" rel="stylesheet">
+    </head>
+    <style>
+        header{
+            min-height: 0px;
+        }
+    </style>
+<body>
+<section>
+    <div class="container">
+        {% if messages %}
+            <div class="fixed-box">
+                {% for message in messages %}
+                    <div {% if message.tags %} class="{{ message.tags }} alert-dismissible fade show"{% endif %}>
+                        {{ message }}
+                        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <header>
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% url 'user_home' ar=request.session.user.area %}">
+                        <img src="{% static 'img/doordropp-logo.png' %}">
+                    </a>
+                    <div class="notification">
+                        <a href="{% url 'user_notifications' %}" style="text-decoration:none;">
+                            <i class="fas fa-bell">
+                            </i>
+                            <span class="translate-middle badge rounded-pill bg-danger p-1" id="spnIdNotificationCount" style="display:none;">
+                            </span>
+                        </a>
+                    </div>
+                    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                            class="navbar-toggler" data-bs-target="#navbarSupportedContent"
+                            data-bs-toggle="collapse" type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link"
+                                   href="{% url 'user_home' ar=request.session.user.area %}">Home</a>
+                            </li>
+                            <li class="nav-item">
+<!--                                <a class="nav-link" href="#">Help Center</a>-->
+                                <a class="nav-link"><button class="btn btn-link p-0 m-0" style="text-decoration:none;" disabled>Help Center</button></a>
+                            </li>
+                            <li class="nav-item">
+<!--                                <a class="nav-link" href="#">Privacy Policy</a>-->
+                                <a class="nav-link"><button class="btn btn-link p-0 m-0" style="text-decoration:none;" disabled>Privacy Policy</button></a>
+                            </li>
+                            <li class="nav-item">
+<!--                                <a class="nav-link" href="#">Faq</a>-->
+                                <a class="nav-link"><button class="btn btn-link p-0 m-0" style="text-decoration:none;" disabled>Faq</button></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <section class="bottom-section fixed-bottom mt-3">
+        <div class="container-fluid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <div class="bottom-btn border-btn-1">
+                            <a href="{% url 'user_notifications' %}"><i class="fas fa-bell"></i>
+                                <h6>Notifications</h6>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <div class="bottom-btn border-btn">
+                            <a href="{% url 'my_orders' %}"><i class="fas fa-shopping-bag"></i>
+                                <h6>Orders</h6>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <div class="bottom-btn border-btn">
+                            <a href="{% url 'user_delivery_home' %}"><i class="fas fa-shipping-fast"></i>
+                                <h6>Delivery</h6>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <div class="bottom-btn border-btn-2">
+                            <a href="{% url 'user_profile' %}"><i class="fas fa-user"></i>
+                                <h6>Profile</h6>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<!-- Optional JavaScript; choose one of the two! -->
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script crossorigin="anonymous"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var intervalID = null;
+    $(document).ready( function(){
+        $(".fixed-box").fadeOut(4000);
+        intervalID = setInterval(getUnreadNotifications, 10000);
+        getUnreadNotifications();
+    });
+
+    function getUnreadNotifications(){
+        $.get("/get-user-unread-notification", function(data, status){
+            if(data['notification_count']){
+                if(data['notification_count'] > 99){
+                    $("#spnIdNotificationCount").text('99+');
+                }else{
+                    $("#spnIdNotificationCount").text(data['notification_count']);
+                }
+                $("#spnIdNotificationCount").show();
+            }else{
+                $("#spnIdNotificationCount").hide();
+            }
+        });
+    }
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-messaging.js"></script>
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyCQkEmnaTcFv-hA9FGeHwuZalH-FP9pxtg",
+        authDomain: "doordropp-izado.firebaseapp.com",
+        projectId: "doordropp-izado",
+        storageBucket: "doordropp-izado.appspot.com",
+        messagingSenderId: "406377898482",
+        appId: "1:406377898482:web:667085aea826451a874b6b",
+        measurementId: "G-D9C7XYKG5W"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    function InitializeFireBaseMessaging() {
+        messaging
+            .requestPermission()
+            .then(function () {
+                <!-- console.log("Notification Permission");-->
+                return messaging.getToken();
+            })
+            .then(function (token) {
+                <!-- console.log("Token : "+token);-->
+                sendToServer(token);
+            })
+            .catch(function (reason) {
+                console.log(reason);
+            });
+    }
+
+    messaging.onMessage(function (payload) {
+        <!-- console.log(payload);-->
+        const notificationOption={
+            body:payload.notification.body,
+            icon:payload.notification.icon
+        };
+
+        if(Notification.permission === "granted"){
+            var notification=new Notification(payload.notification.title,notificationOption);
+            notification.onclick=function (ev) {
+                ev.preventDefault();
+                window.open(payload.notification.click_action,'_blank');
+                notification.close();
+            }
+        }
+    });
+
+    messaging.onTokenRefresh(function () {
+        messaging.getToken()
+            .then(function (newtoken) {
+                sendToServer(newtoken);
+            })
+            .catch(function (reason) {
+                console.log(reason);
+            })
+    });
+
+    function sendToServer(token){
+         $.ajax({
+            url:'{% url 'user_fcm_token_save' %}',
+            type:'POST',
+            data:{token:token},
+        })
+        .done(function(response){
+            if(response=="True"){
+                console.log("Token Save")
+            }
+            else{
+                console.log("Error in Token Save")
+            }
+        });
+    }
+    InitializeFireBaseMessaging();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% extends 'sys_admin/base_admin.html' %}
+{% load static %}
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    {% endblock styles %}
+
+{% block content %}
+    
+    <!-- MESSAGE -->
+    <div class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="alert-box">
+            <div class="alert alert-warning">
+                <label id="idErrorLabel"></label>
+            </div>
+        </div>
+    </div>
+
+    <!-- container -->
+    <!-- <div class="align-items-center"> -->
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="justify-content-center">
+                        <div class="bg-white regis-box">
+                            <form action="{% url 'addSettings' %}" id="idForm" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                                <h3 class="reg-text">Basic Settings</h3>
+                                <hr>
+
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 frm_fld">
+                                            <label for="{{form.normal_order_delivery_charge.id_for_label}}">Normal Order Delivery Charge</label><span class="red_star">*</span>
+                                            <input type="number" step="0.1" min="0.0" name="{{form.normal_order_delivery_charge.name}}" id="{{form.normal_order_delivery_charge.id_for_label}}" class="form-control" value="{{form.normal_order_delivery_charge.value}}" required>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 frm_fld">
+                                            <label for="{{form.bulky_order_delivery_charge.id_for_label}}">Bulky Order Delivery Charge</label><span class="red_star">*</span>
+                                            <input type="number" step="0.1" min="0.0" name="{{form.bulky_order_delivery_charge.name}}" id="{{form.bulky_order_delivery_charge.id_for_label}}" class="form-control" value="{{form.bulky_order_delivery_charge.value}}" required>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 frm_fld">
+                                            <label for="{{form.normal_order_weight_limit.id_for_label}}">Normal Order Weight Limit in Kilograms</label><span class="red_star">*</span>
+                                            <input type="number" step="1" min="0" name="{{form.normal_order_weight_limit.name}}" id="{{form.normal_order_weight_limit.id_for_label}}" class="form-control" value="{{form.normal_order_weight_limit.value}}" required>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 frm_fld">
+                                            <label for="{{form.average_weight_of_normal_item.id_for_label}}">Average Weight of an Item in Grams</label><span class="red_star">*</span>
+                                            <input type="number" step="1" min="0" name="{{form.average_weight_of_normal_item.name}}" id="{{form.average_weight_of_normal_item.id_for_label}}" class="form-control" value="{{form.average_weight_of_normal_item.value}}" required>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 frm_fld">
+                                            <label for="{{form.expire_orders_in.id_for_label}}">Expire Invalid Orders in Hours</label><span class="red_star">*</span>
+                                            <input type="number" step="1" min="0" name="{{form.expire_orders_in.name}}" id="{{form.expire_orders_in.id_for_label}}" class="form-control" value="{{form.expire_orders_in.value}}" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-regis">Update</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+            </div>
+            </div>
+        </div>
+
+    <!-- </div> -->
+
+    {% load static %}
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+{% endblock %}

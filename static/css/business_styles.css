@@ -1,0 +1,878 @@
+@charset "utf-8";
+/* CSS Document */
+body{ font-family: 'Raleway', sans-serif; }
+
+.navbar-brand img{ width: 140px; height: auto; }
+header {
+    width: 100%;
+
+    background-color: #00d4f2;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px; box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4));
+}
+
+.navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show > .nav-link {
+    color:#fff;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: #fff; font-weight: 500;
+}
+.nav-item::marker{ color: #00d4f2; }
+.nav-link {
+    display: inherit;
+    padding: .5rem 1rem;
+    color: #fff;
+    text-decoration: none;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+.nav-link:marker{
+    color:  #00d4f2;
+}
+.nav-link:focus, .nav-link:hover {
+    color: #000;
+}
+    .navbar-light .navbar-nav .nav-link {
+    color: #fff;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 10px;
+    margin-right: 10px;
+
+}
+.notification { display: none; }
+.notification i {
+    color: #fff;
+    font-size: 18px;
+}
+.notification i:hover {
+    color: #000;
+    font-size: 18px;
+}
+.notification-1 {
+padding-left: 30px;
+ }
+ .notification-1 i {
+     color: #fff;
+    font-size: 18px;
+ }
+  .notification-1 i:hover {
+     color: #000;
+    font-size: 18px;
+ }
+/* INDEX PAGE */
+.bus-head h3 {
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+}
+.bus-head {
+    background-color: #74d4f1;
+    padding: 8px;
+    border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+}
+.business-section{box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); border-radius: 3px; margin-top: 100px;}
+.business-content{ padding: 10px;  }
+.business-content h5 {
+    font-size: 20px;
+    color: #45b2d3;
+}
+.business-content h3{ font-size: 16px; color: #606060; font-weight: normal; float: left;}
+.business-content h6{ font-size: 16px; text-align: right; color: #45b2d3;}
+.business-content p{ font-family: 'Open Sans', sans-serif; font-size: 14px;  text-align: right; color: #606060; font-weight: normal; margin-bottom: 0px;}
+.business-content h4{  font-size: 20px;
+    color: #bbb;
+ margin-bottom: 0px;
+}
+.business-content hr{
+    height: 1px;
+    background-color: #74d4f1;
+    margin-top: 10px;
+}
+.business-order{ border-radius: 4px; padding: 15px; background-color: #f5fdff;  }
+.business-order span{ font-size: 14px; color: #ff712c; padding-left: 20px;}
+.business-content a{ text-decoration: none; }
+.process-btn{ margin-top: 10px; }
+.process-btn .btn-primary {
+    color: #fff;
+    background-color: #59da8b;
+    border-color: #59da8b;
+}
+.process-btn .btn-primary:hover {
+    color: #fff;
+    background-color: #38b669;
+    border-color: #38b669;
+}
+
+
+
+.business-content h5 {
+    font-size: 20px;
+    color: #45b2d3;
+}
+/* ORDER TABLE PAGE */
+.order-price-section{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); border-radius: 10px;  }
+.order-id-section{ background-color: #54b2cf; padding: 15px; border-radius: 10px; }
+.order-id-section h5{ font-size: 16px; color: #fff; font-weight:600; float: left;}
+.order-id-section h6{ font-size: 16px; text-align: right; color: #fff; font-weight:600;}
+.order-id-section h3{ font-family: 'Open Sans', sans-serif; font-size: 14px;  text-align: right; color: #fff; font-weight: normal; margin-bottom: 0px;}
+.order-id-section h4{  font-size: 16px; color:  #fff; }
+.order-table{ padding: 15px; }
+.order-table .table > :not(caption) > * > * {
+    padding: .5rem .5rem;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 0px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+.order-table i{ color: #acacac; }
+
+.order-table i:hover{ color:#7be0ff; }
+.order-row{ border: 1px solid #54b2cf; border-radius: 7px; }
+
+/* SCREENSHOT PAGE */
+.upload-screenshot img{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); border-radius: 4px;  }
+.items-list{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); border-radius: 7px; margin-top: 30px; padding: 20px; padding-top: 25px; margin-bottom: 30px; }
+.items-list i {
+    font-size: 37px;
+    color: #39cba3;
+    cursor: pointer;
+}
+.add-ic{ display: grid; }
+
+
+
+.items-list .col-lg-2 {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.screensht-btn{  margin-top: 20px; }
+.screensht-btn .btn-primary {
+    color: #fff;
+    background-color: #59da8b;
+    border-color: #59da8b;
+}
+.screensht-btn .btn-primary:hover {
+    color: #fff;
+    background-color: #38b669;
+    border-color: #38b669;
+}
+.screensht-btn .btn{
+    display: inline-block;
+    font-weight: 600;
+    line-height: 1.5;
+
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+
+
+    padding:10px 50px;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+
+/*----MY ORDERS----*/
+.myorder-search {box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); padding-top: 50px; margin-top: 30px; margin-bottom: 30px; border-radius: 5px;}
+.myorder-search label {
+
+}
+.myorder-search input {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 3px 5px;
+
+  width: 190px;
+}
+.date-section-1 .form-group{ display: flex; }
+
+
+.date-section-1 .form-control {
+    display: block;
+
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    padding: 3px 5px;
+    width: 190px;
+}
+.my-orders a{ text-decoration: none; }
+.order-btn { margin-top: 30px; margin-bottom: 30px;  }
+.date-section-1 label{ padding-top: 3px; padding-right: 15px; }
+.date-section label{ padding-right: 12px; }
+.order-success{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); padding: 15px; border: 2px solid  #39cba3; border-radius: 5px; height:76px; }
+.order-success h4{ font-size:14px; color: #555; font-weight: 600; }
+.order-success h5{ font-size:14px; color:  #000; font-weight: 600; }
+.order-success p{ font-size:12px; color: #229374; }
+
+.order-pending{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); padding: 15px; border: 2px solid  #ebff00; border-radius: 5px; height:76px; }
+.order-pending h4{ font-size:14px; color: #555; font-weight: 600; }
+.order-pending h5{ font-size:14px; color:  #000; font-weight: 600; }
+.order-pending p{ font-size:12px; color: #bccc00; }
+
+
+.order-cancel{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); padding: 15px; border: 2px solid  #ff950c; border-radius: 5px; height:76px; }
+.order-cancel h4{ font-size:14px; color: #555; font-weight: 600; }
+.order-cancel h5{ font-size:14px; color:  #000; font-weight: 600; }
+.order-cancel p{ font-size:12px; color: #ff950c; }
+
+
+.order-btn .btn {
+    display: inline-block;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
+    border: 1px solid transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    padding: 7px 36px;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.order-btn .btn-primary {
+    color: #fff;
+    background-color: #52b2ec;
+    border-color: ##52b2ec;
+}
+.order-btn .btn-primary:hover {
+    color: #fff;
+    background-color: #39cba3;
+    border-color: #39cba3;
+}
+.order-submit .btn-primary {
+    color: #fff;
+    background-color: #52b2ec;
+    border-color: ##52b2ec;
+}
+.order-submit .btn-primary:hover {
+    color: #fff;
+    background-color: #39cba3;
+    border-color: #39cba3;
+}
+.order-submit .btn {
+    display: inline-block;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
+    border: 1px solid transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    padding: 7px 36px;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+/*----NOTIFICATION----*/
+.notifiction-box{ border-radius: 10px; border: 1px solid #373737; padding: 15px; margin-bottom: 20px; }
+.notifiction-box h6{ font-size: 20px; color: #373737; font-weight:normal; }
+.notifiction-box h4{ font-size: 16px; color: #373737; font-weight: normal; }
+.notifiction-box h5{ font-size: 16px; color: #373737; font-weight: normal; text-align: right; }
+.notifiction-box a{ text-decoration: none; }
+.notification-section{ margin-top: 20px; }
+.notifiction-box-1{ border-radius: 10px; border: 1px solid #999; padding: 15px; margin-bottom: 20px; }
+.notifiction-box-1 h6{ font-size: 20px; color: #999; font-weight:normal; }
+.notifiction-box-1 h4{ font-size: 16px; color: #999; font-weight: normal; }
+.notifiction-box-1 h5{ font-size: 16px; color: #999; font-weight: normal; text-align: right; }
+.notifiction-box-1 a{ text-decoration: none; }
+
+
+
+
+
+
+.order-table h3 {
+    text-align: center;
+    background-color: #e2e2e2;
+    padding: 20px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 0px;
+}
+
+/*----Order-info Delivery details----*/
+.delivery-text{ padding: 15px; }
+.delivery-text h3{ font-size: 18px; font-weight: 600; padding-top: 2px; background-color: inherit;}
+.delivery-text p{ font-size: 18px; color: #696969; padding: 0px; font-weight: normal; }
+.delivery-text h4{ font-size: 16px; color:red; font-weight: normal; text-align: center; }
+.delivery-details{ border:1px solid #e2e2e2; margin-bottom: 20px; }
+.delivery-details h6{ margin-top: 0px;
+ text-align: center;
+    background-color: #e2e2e2;
+    padding: 20px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 0px; }
+
+.order-info-business-row{ border: 1px solid #e2e2e2; border-radius: 7px; }
+.order-info-submit{ margin-top: 20px; margin-bottom: 20px; }
+.order-info-submit .btn-primary {
+    color: #fff;
+    background-color: #52b2ec;
+    border-color: #52b2ec;
+}
+.order-info-submit .btn-primary:hover {
+    color: #fff;
+    background-color: #39cba3;
+    border-color: #39cba3;
+}
+.order-info-submit .btn {
+    display: inline-block;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
+    border: 1px solid transparent;
+        border-top-color: transparent;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+    padding: 7px 36px;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.order-status h4{ font-size: 20px; color: #000; padding-left: 20px; padding-bottom: 10px;  }
+.order-status span{ color: #38e65c; font-weight: normal; font-size: 16px; padding-left: 15px; }
+
+.reset-password{ margin: auto;  margin-top: 130px;   }
+.reset-password .card-title{ font-size: 22px; font-weight: 600; color: #fff; text-align: center; margin-bottom: 0px; }
+.reset-password .form-group{ margin-top: 10px; }
+
+
+.reset-password .card-header {
+    padding: .5rem 1rem;
+    margin-bottom: 0;
+    background-color: rgb(0, 212, 242);
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+.card-footer .btn {
+    display: inline-block;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    width: 100%;
+}
+.card-footer .btn-info {
+    color: #fff;
+    background-color: #52b2ec;
+    border-color: #52b2ec;
+}
+.card-footer .btn-info:hover {
+    color: #fff;
+    background-color: #39cba3;
+    border-color: #39cba3;
+}
+
+
+
+
+.payment-notificaton-busi{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); padding: 15px; border-radius: 7px; }
+.payment-notificaton-busi h3{ font-size: 18px; color: #000; padding-bottom: 10px; text-align: center;
+padding-top: 10px;
+margin-bottom: 0px; }
+
+.payment-notificaton-busi p{padding: 15px;
+font-size: 14px;
+color: #777; margin-bottom: 0px;}
+
+
+
+.credit-section{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); padding: 15px; border-radius: 7px; border: 1px solid green; }
+.credit-section h6{ font-size: 16px; font-weight: 600; color: #000; }
+.credit-section h5{ font-size: 16px; font-weight: 600; color: #000; text-align: right; }
+.credit-section p{ font-size: 16px; color: #777; font-weight: 500; }
+.credit-section span{ font-size: 16px;  color: #777; float: right; font-weight: 500; }
+.credit-section h4{ font-size: 16px; font-weight: 500; color: #777; text-align: center; }
+
+
+.debit-section{ box-shadow: var(--shd,0 1px 4px rgba(0,0,0,.4)); padding: 15px; border-radius: 7px; border: 1px solid orange; }
+.debit-section h6{ font-size: 16px; font-weight: 600; color: #000; }
+.debit-section h5{ font-size: 16px; font-weight: 600; color: #000; text-align: right; }
+.debit-section p{ font-size: 16px; color: #777; font-weight: 500; }
+.debit-section span{ font-size: 16px;  color: #777; float: right; font-weight: 500; }
+.debit-section h4{ font-size: 16px; font-weight: 500; color: #777; text-align: center; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen  and (max-width:1199px) {
+.date-section label {
+    padding-right: 12px;
+    font-size: 14px;
+}
+.order-success h4 {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+}
+.order-pending h4 {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+}
+.order-cancel h4 {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+}
+.order-success p {
+    font-size: 10px;
+    color: #ff950c;
+}
+.order-pending p {
+    font-size: 10px;
+    color: #ff950c;
+}
+.order-cancel p {
+    font-size: 10px;
+    color: #ff950c;
+}
+
+}
+
+@media screen  and (max-width:991px) {
+   .process-btn {
+    text-align: right !important;
+}
+.business-content h3 {
+
+    float: none;
+
+}
+.business-order span {
+
+    padding-left:0px;
+}
+.business-content h4 {
+    font-size: 16px;
+
+}
+/*----MY ORDERS----*/
+
+.date-section i{ display: none;  }
+.date-section-1 label {
+ font-size: 13px;
+}
+.date-section label {
+
+    font-size: 13px;
+}
+.myorder-search {
+
+    padding-top: 12px;}
+        .order-btn .btn {
+
+    padding: 3px 28px;
+}
+.order-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.date-section-1{ margin-left: 30px; margin-top: 15px; }
+.order-pending { margin-bottom: 15px; margin-top: 15px; }
+.my-orders { margin-bottom: 70px; }
+    }
+@media screen  and (max-width:767px) {
+.navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show > .nav-link {
+    color: #103f58;
+    font-weight: bold;
+    border-radius: 6px;
+}
+.navbar-light .navbar-toggler {
+    color: rgba(255, 255, 255, 0.55);
+
+    border: 2px solid #fff;
+    padding: 0px;
+}
+.process-btn {
+    text-align: right !important;
+}
+.business-content h3 {
+    font-size: 14px;
+    color: #606060;
+    font-weight: normal;
+    float: none;
+    margin-bottom: 5px;
+}
+.business-order span {
+
+    padding-left:0px;
+}
+.business-content h4 {
+    font-size: 14px;
+
+}
+
+
+
+/*----MY orders----*/
+.date-section-1 .form-control {
+    width: 100%;
+    margin-right: 20px;
+}
+.date-section-1 label {
+    padding-top: 6px;
+    padding-right: 19px;
+    font-size: 12px;
+    width: 200px;
+    text-align: left;
+    padding: 15px;
+}
+.myorder-search {
+
+    padding-top: 17px;}
+    .date-section-1{ margin-top: 15px; }
+    .order-btn .btn {
+
+    padding: 3px 28px;
+}
+.order-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.order-pending { margin-top: 10px; margin-bottom: 10px; }
+.my-orders{ margin-bottom: 70px; }
+.myorder-search input {
+    border: 1px solid #c4c4c4;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 3px 5px;
+    width: 150px;
+}
+.date-section-1 .form-group {
+    display: flex;
+}
+/*----ORDER INFO DELIVERY DETAILS----*/
+.delivery-text h3 {
+    font-size: 16px;
+
+}
+.delivery-text p {
+    font-size: 16px;
+
+}
+.delivery-text h4 {
+    font-size: 12px;
+
+}
+.debit-section p {
+    font-size: 14px;
+
+}
+.debit-section span {
+    font-size: 14px;
+
+}
+.debit-section h4 {
+    font-size: 14px;
+
+}
+    }
+
+@media screen  and (max-width:499px) {
+    .notification { display: inherit; }
+    .notification-1 { display: none; }
+    .navbar-light .navbar-nav .nav-link {
+    color: #fff;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 10px;
+    margin-right: 10px;
+    border-radius: 8px;
+}
+
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+    color: rgba(0,0,0,.7);
+    color: #fff;
+    font-weight: bold;
+    background-color: #165e85;
+
+    border-radius: 8px;
+}
+
+.navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show > .nav-link {
+    color: #fff;
+    font-weight: bold;
+    border-radius: 6px;
+}
+.navbar-light .navbar-toggler {
+    color: rgba(255, 255, 255, 0.55);
+
+    border: 2px solid #fff;
+    padding: 0px;
+}
+    /* HOME PAGE */
+
+.business-order span{ font-size: 12px;  padding-left: 0px;}
+.business-content h3 {
+    font-size: 10px;
+    color: #606060;
+    font-weight: normal;
+    float: none;
+    margin-bottom: 5px;
+}
+.bus-head h3 {
+
+    font-size: 18px;
+
+}
+.business-content h4 {
+    font-size: 14px;
+
+}
+.process-btn {
+    text-align: right !important;
+}
+
+/* ORDER TABLE PAGE */
+.order-table .table > :not(:last-child) > :last-child > * {
+    border-bottom-color: currentColor;
+    font-size: 12px;
+}
+.total-font{
+font-size: 9px;
+    }
+.order-table .table > :not(caption) > * > * {
+    padding: .5rem .5rem;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 0px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg); font-size: 10px;
+}
+/* SCREENSHOT PAGE */
+.items-list i {
+    font-size: 22px;
+    color: #39cba3;
+    cursor: pointer;
+}
+.items-list{ padding: 10px; margin-bottom: 25px; }
+
+
+.notifiction-box{ padding: 10px; margin-bottom: 10px; }
+.notifiction-box h6{ font-size: 14px;  }
+.notifiction-box h4{ font-size: 12px;  }
+.notifiction-box h5{ font-size: 12px;  }
+
+.notifiction-box-1{ padding: 10px; margin-bottom: 10px; }
+.notifiction-box-1 h6{ font-size: 14px;  }
+.notifiction-box-1 h4{ font-size: 12px;  }
+.notifiction-box-1 h5{ font-size: 12px;  }
+
+
+/*----MY Orders----*/
+.date-section{ margin-bottom: 15px; }
+.date-section label {
+    padding-right: 0px; font-size: 12px; width: 100px; text-align: left;
+}
+.date-section-1 label {
+    padding-top: 6px;
+    padding-right: 19px;
+    font-size: 12px;
+    width: 110px;
+    text-align: left;
+}
+.date-section i{ display: none;  }
+.myorder-search {  padding: 10px; padding-top: 30px;}
+.order-btn {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.order-btn .btn {
+
+    padding: 3px 28px;
+}
+.order-success h4 {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+}
+.order-pending h4 {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+}
+.order-cancel h4 {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+}
+.order-pending{ margin-top: 10px; margin-bottom: 15px; }
+.order-pending p {
+    font-size: 11px;
+
+}
+.form-padding-1 .form-control {
+
+    padding: 0px;
+}
+.form-padding-1 .col-lg-4 {
+
+    padding-right: 3px;
+}
+.order-cancel p{   font-size: 11px; }
+.order-success p{ font-size: 11px; }
+.my-orders{ margin-bottom: 70px; }
+.myorder-search input {
+    border: 1px solid #c4c4c4;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 3px 5px;
+    width: 125px;
+    font-size: 12px;
+}
+.date-section-1 .form-control {
+
+    width: 100%;
+}
+
+
+.notification {
+    margin-left: 0px;
+}
+/*----NOTIFICATION----*/
+.notifiction-box{ padding: 10px; margin-bottom: 10px; }
+.notifiction-box h6{ font-size: 14px;  }
+.notifiction-box h4{ font-size: 12px;  }
+.notifiction-box h5{ font-size: 12px;  }
+
+/*----ORDER INFO DELIVERY DETAILS----*/
+.delivery-text h3 {
+    font-size: 10px;
+
+}
+.delivery-text p {
+    font-size: 11px;
+    color: #696969;
+    padding: 0px;
+    font-weight: normal;
+}
+.delivery-text h3 {
+    font-size: 13px;
+    padding: 0px;
+}
+.delivery-text h4 {
+    font-size: 10px;
+    color: red;
+    font-weight: 600;
+    padding-left: 12px;
+}
+
+
+
+
+/*PAYMENT PAGE */
+
+.payment-notificaton-busi h3 {
+    font-size: 12px;
+
+}
+.payment-notificaton-busi p {
+padding: 0px;
+    font-size: 10px;
+
+    text-align: justify;
+}
+
+
+
+
+.debit-section h6 {
+    font-size: 14px;
+
+}
+.debit-section p {
+    font-size: 12px;
+
+}
+.debit-section span {
+    font-size: 12px;
+
+}
+.debit-section h4 {
+    font-size: 12px;
+
+}
+}

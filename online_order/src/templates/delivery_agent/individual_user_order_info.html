@@ -1,0 +1,66 @@
+{% extends 'delivery_agent/base_agent.html' %}
+
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="agent-order-section">
+            <div class="agent-id-section">
+                <div class="row">
+                    <div class="col-6 col-lg-6"><h5>{{order_object.order_id}}</h5></div>
+                    <div class="col-6 col-lg-6"><h6>{{order_object.common_user.name}}</h6></div>
+                    <div class="col-6 col-lg-6"><h4>{{order_object.business.area_specified.area}}</h4></div>
+                    <div class="col-6 col-lg-6"><h3>{{order_object.created | date:'l  -  j/N/y'}} &nbsp;&nbsp;&nbsp;&nbsp; {{order_object.created | time:'h:i A'}}</h3></div>
+                </div>
+            </div>
+            <div class="agent-table">
+                {% if order_object.order_type == 1 %}
+                    <h3>ORDER INFO</h3>
+                    <table class="table order-info-business-row">
+                        <thead>
+                        <tr style="border-bottom: 1px solid #e2e2e2;">
+                            <th scope="col">SL NO</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col"><i class="fas fa-rupee-sign" style="color: #000;"></i>INR</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in order_object.order_details.all %}
+                            <tr>
+                                <th style="font-weight: normal;">{{forloop.counter}}</th>
+                                <td>{{i.item}}</td>
+                                <td>{{i.quantity}}&nbsp;{{i.unit.short_name}}</td>
+                                <td>{{i.price}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                                <th scope="row"></th>
+                                <td colspan="2" style="font-weight: 600;">Total</td>
+                                <td style="font-weight: 600;">{{order_object.order_amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="container">
+                        <h3>ORDER INFO</h3>
+                        <hr>
+                        <div style="border-top-left-radius: 3px; border-top-right-radius: 3px; font-size:14px;">
+                            <div class="row">
+                                <div class="col-8">Total Items in Order</div>
+                                <div class="col-4 text-left">: {{order_object.order_total_items}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">Total Amount</div>
+                                <div class="col-4 text-left">: {{order_object.order_amount}} <i class="fas fa-rupee-sign" style="color: #000; font-size:14px;"></i> </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'sys_admin/base_admin.html' %}
+{% load static %}
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    {% endblock styles %}
+
+    {% block content %}
+
+    <!-- messages -->
+    <div class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- container1 ------------------>
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 frm_fld">
+
+                <form action="{% url 'activityLogs' %}" id="idForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- search and filter alarms-->
+                    <div class="form-group">
+                        <div class="form-row">
+
+                            <!-- date from-->
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                                <label for="id_date_from" title="Search activity logs from this date to present">Date From</label>
+                                <input type="date" name="date_from" id="id_date_from" class="form-control">
+                            </div>
+
+                            <!-- date-->
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12">
+                                <label for="id_date_to" title="Search activity logs for a particular date">Date To</label>
+                                <input type="date" name="date_to" id="id_date_to" class="form-control">
+                            </div>
+
+                            <!-- search button-->
+                            <div class="col-2 btn-srch text-center">
+                                <input type="submit" id="idSave" class="btn btn-regis" value="Search">
+                            </div>
+
+                            <!-- export button-->
+                            <a href="{% url 'exportActivityLogs' %}">
+                                <div class="col-2 btn-srch">
+                                    <input type="button" id="idExport" class="btn btn-regis" value="Export" title="Export to Microsoft excel file(.xls)">
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div><!--end of row -->
+
+    </div><!-- end of container1 --------->
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="an-acoo-head">
+                    <span class="an-head-name">Activity Logs</span>
+                    <span class="line-h"></span>
+                </div>
+
+                <table id="id_data_table" class="table table-hover bg-white">
+                    <thead class="br-bottom" style="background-color: #a2c4db;">
+                        <tr>
+                            <th scope="col">Activity</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for act in all_activity_logs %}
+                            <tr class="br-bottom">
+                                <td class="activity_table">{{ act.activity }}</td>
+                                <td class="activity_table">{{ act.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div> <!-- end of row -->
+    </div>
+
+
+    {% load static %}
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/DataTables-1.10.24/js/dataTables.bootstrap4.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            $('#id_data_table').DataTable();
+        });
+    </script>
+
+{% endblock %}

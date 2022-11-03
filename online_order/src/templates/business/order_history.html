@@ -1,0 +1,160 @@
+{% extends 'business/base_business.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .myorder-search select {
+        border: 1px solid #c4c4c4;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 3px 5px;
+        width: 100%;
+        font-size: 12px;
+    }
+    .myorder-search input {
+        border: 1px solid #c4c4c4;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 3px 5px;
+        width: 100%;
+        font-size: 12px;
+    }
+    .my-orders .order-pending,
+    .my-orders .order-cancel,
+    .my-orders .order-success{
+        height:auto;
+        margin: 0px;
+    }
+</style>
+
+<section>
+    <div class="container">
+        <div class="myorder-search">
+            <form action="{% url 'order_history' %}" id="idForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row m-1">
+                    <div class="col-6 col-sm-6 col-lg-3">
+                        <div class="date-section">
+                            <label for="id_date_from">Date From</label>
+                            <input id="id_date_from" class="w-100" name="date_from" type="date">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-3">
+                        <div class="date-section">
+                            <label for="id_date_to">Date To</label>
+                            <input id="id_date_to" class="w-100" name="date_to" type="date">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-3">
+                        <div class="date-section">
+                            <label for="id_order_type">Order Type</label>
+                            <select id="id_order_type" name="order_type" class="form-control select2 select2-hidden-accessible">
+                                <option value="">Choose..</option>
+                                <option value="1">By Form</option>
+                                <option value="2">By Upload Sheet</option>
+                                <option value="3">By Call</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-3">
+                        <div class="date-section">
+                            <label for="id_status">Status</label>
+                            <select id="id_status" name="status" class="form-control select2 select2-hidden-accessible">
+                                <option value="">Choose..</option>
+                                <option value="1">Opened</option>
+                                <option value="2">Accepted</option>
+                                <option value="3">Rejected</option>
+                                <option value="5">Confirmed</option>
+                                <option value="5">Packed</option>
+                                <option value="7">Agent Picked</option>
+                                <option value="8">Delivered</option>
+                                <option value="12">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="order-btn text-center">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+<section>
+    <div class="container">
+        <div class="my-orders">
+            <div class="row">
+                {% for i in all_orders %}
+                    {% if i.status == 1 %}
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <a href="{% url 'review_order' order=i.id order_type=i.order_type %}">
+                                <div class="order-pending mb-2">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-6"><h4>{{i.order_id}}</h4></div>
+                                        <div class="col-6 col-lg-6"><h5>{{i.common_user.name}}</h5></div>
+                                        <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                        <div class="col-6 col-lg-6"><p>Order is open, please review the order</p></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <a href="{% url 'order_info' order=i.id %}">
+                                {% if i.status == 12 or i.status == 3 %}
+                                    <div class="order-cancel mb-2">
+                                        <div class="row">
+                                            <div class="col-6 col-lg-6"><h4>{{i.order_id}}</h4></div>
+                                            <div class="col-6 col-lg-6"><h5>{{i.common_user.name}}</h5></div>
+                                            <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                            {% if i.status == 12 %}
+                                                <div class="col-6 col-lg-6"><p>{{i.common_user.name}} cancelled the order</p></div>
+                                            {% else %}
+                                                <div class="col-6 col-lg-6"><p>You rejected the order</p></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% elif i.status == 2 or i.status == 4 %}
+                                    <div class="order-pending mb-2">
+                                        <div class="row">
+                                            <div class="col-6 col-lg-6"><h4>{{i.order_id}}</h4></div>
+                                            <div class="col-6 col-lg-6"><h5>{{i.common_user.name}}</h5></div>
+                                            <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                            <div class="col-6 col-lg-6"><p>You accept the order, waiting for {{i.common_user.name}}'s confirmation</p></div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="order-success mb-2">
+                                        <div class="row">
+                                            <div class="col-6 col-lg-6"><h4>{{i.order_id}}</h4></div>
+                                            <div class="col-6 col-lg-6"><h5>{{i.common_user.name}}</h5></div>
+                                            <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                            {% if i.status == 5 %}
+                                                <div class="col-6 col-lg-6"><p>Order confirmed by {{i.common_user.name}}, processing packing..</p></div>
+                                            {% elif i.status == 6 %}
+                                                <div class="col-6 col-lg-6"><p>Packing completed..</p></div>
+                                            {% elif i.status == 7 %}
+                                                <div class="col-6 col-lg-6"><p>Delivery agent picked the order</p></div>
+                                            {% elif i.status == 8 %}
+                                                <div class="col-6 col-lg-6"><p>Order delivered</p></div>
+                                            {% elif i.status == 11 %}
+                                                <div class="col-6 col-lg-6"><p>Collect order payment</p></div>
+                                            {% else %}
+                                                <div class="col-6 col-lg-6"><p>Processing the order payment..</p></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

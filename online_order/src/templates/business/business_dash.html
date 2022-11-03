@@ -1,0 +1,96 @@
+{% extends 'business/base_business.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .business-order span {
+        padding-left: 0px;
+    }
+
+</style>
+
+<section>
+    <div class="container">
+        <div class="business-section mt-5">
+            <div class="bus-head">
+                <h3>Today's Orders</h3>
+            </div>
+            <div class="business-content">
+                <h4>To Process</h4>
+                <hr>
+                <div id="divIdToProcess">
+                    {% for i in all_orders_opened %}
+                        <a href="{% url 'review_order' order=i.id order_type=i.order_type %}">
+                            <div class="business-order">
+                                <div class="row">
+                                    <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                    <div class="col-6 col-lg-6"><h6>{{i.common_user.name}}</h6></div>
+                                    <div class="col-6 col-lg-6">
+                                        {% if i.order_type == 1 %}
+                                            <h3>Order Type : by Form </h3>
+                                        {% elif i.order_type == 2 %}
+                                            <h3>Order Type : by Upload Sheet </h3>
+                                        {% else %}
+                                            <h3>Order Type : by Call </h3>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-6 col-lg-6"><p>{{i.created|date:'j/N/y  h:i A'}}</p></div>
+                                    <div class="col-12 col-lg-12">
+                                        {% if i.order_type == 1 %}
+                                            <span>An order was opened. Review the order and update the price</span>
+                                        {% elif i.order_type == 2 %}
+                                            <span>An order was opened. Review the order and update the details</span>
+                                        {% elif i.order_type == 3 %}
+                                            <span>An order was opened. First call the user and confirm the order, then review it</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="business-content pb-5">
+                <h4>Confirmed order</h4>
+                <hr>
+                <div id="divIdConfirmed">
+                    {% for i in all_orders_placed %}
+                        <a href="{% url 'order_info' order=i.id %}">
+                            <div class="business-order">
+                                <div class="row">
+                                    <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                    <div class="col-6 col-lg-6"><h6>{{i.common_user.name}}</h6></div>
+                                    <div class="col-6 col-lg-6">
+                                        {% if i.order_type == 1 %}
+                                            <h3>Order Type : by Form </h3>
+                                        {% elif i.order_type == 2 %}
+                                            <h3>Order Type : by Upload Sheet </h3>
+                                        {% else %}
+                                            <h3>Order Type : by Call </h3>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-6 col-lg-6"><p>{{i.created|date:'j/N/y  h:i A'}}</p></div>
+                                    <div class="col-12 col-lg-12">
+                                        <span>Order confirmed by {{i.common_user.name}}, processing packing..Please update status when packing is complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="row">
+                            <div class="process-btn text-center">
+                                <button class="btn btn-primary" type="button" onclick="window.location.assign('{% url 'order_processing' order=i.id %}')">Packed</button>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/business/business_dash.js' %}"></script>
+
+{% endblock %}

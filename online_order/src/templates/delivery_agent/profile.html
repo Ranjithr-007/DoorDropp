@@ -1,0 +1,146 @@
+{% extends 'delivery_agent/base_agent.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .panel100{
+        width: 100%;
+        box-sizing: border-box;
+        background: #f1d5d5;
+        height: auto;
+        border: 1px solid #f1b2a6;
+        box-shadow: 1px 1px 5px rgba(100,100,100,.1);
+        display: none;
+    }
+
+    #errorContainer{
+        display:none;
+    }
+
+    #errorContainer ul{
+        list-style-type: none;
+        display: block;
+        padding: 10px;
+        margin: 0px;
+    }
+
+    #errorContainer li{
+        font-size: 12px;
+        list-style-type: none;
+        display: list-item;
+    }
+
+    #errorContainer li label{
+        margin: 0px;
+    }
+
+    .error{
+        color: #af2206;
+    }
+
+    .error-valid{
+        border: 1px solid #af2206;
+    }
+
+    .success-valid{
+        border: 1px solid #00940f;
+    }
+
+    #errorContainer label {
+        padding-top: 0px;
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .red_star{
+        color:#d94848;
+    }
+</style>
+
+<section>
+    <div class="container">
+        <div class="agent-my-profile mb-4">
+            <div class="panel100 pb-2">
+            <!--Mandatory Common Error Display Div-->
+                <div id="errorContainer">
+                    <ul id="error_list"></ul>
+                </div><!-- Jquery Validator Container -->
+            </div>
+            <div class="text-center">
+                <h6>Update Profile</h6>
+            </div>
+            <form class="row g-3" action="{% url 'agent_profile' %}" method="post" id="idForm">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <label class="form-label" for="{{form.name.id_for_label}}">Name<span style="color:#fa3002">*</span></label>
+                    <input class="form-control" type="text" name="{{form.name.name}}" id="{{form.name.id_for_label}}" value="{{form.name.value}}" maxlength="100" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{form.mobile.id_for_label}}">Mobile<span style="color:#fa3002">*</span></label>
+                    <input class="form-control" type="text" name="{{form.mobile.name}}" id="{{form.mobile.id_for_label}}" value="{{form.mobile.value}}" maxlength="10" minlength="10" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{form.email.id_for_label}}">Email</label>
+                    {% if form.email.value %}
+                        <input class="form-control" type="email" name="{{form.email.name}}" id="{{form.email.id_for_label}}" value="{{form.email.value}}" maxlength="100">
+                    {% else %}
+                        <input class="form-control" type="email" name="{{form.email.name}}" id="{{form.email.id_for_label}}" value="" maxlength="100">
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{form.upi_id.id_for_label}}">UPI ID</label>
+                    {% if form.upi_id.value %}
+                        <input class="form-control" type="text" name="{{form.upi_id.name}}" id="{{form.upi_id.id_for_label}}" value="{{form.upi_id.value}}" maxlength="50">
+                    {% else %}
+                        <input class="form-control" type="text" name="{{form.upi_id.name}}" id="{{form.upi_id.id_for_label}}" value="" maxlength="50">
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{form.account_no.id_for_label}}">Account Number</label>
+                    {% if form.account_no.value %}
+                        <input class="form-control" type="text" name="{{form.account_no.name}}" id="{{form.account_no.id_for_label}}" value="{{form.account_no.value}}" maxlength="30">
+                    {% else %}
+                        <input class="form-control" type="text" name="{{form.account_no.name}}" id="{{form.account_no.id_for_label}}" value="" maxlength="30">
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{form.ifsc.id_for_label}}">IFSC</label>
+                    {% if form.ifsc.value %}
+                        <input class="form-control" type="text" name="{{form.ifsc.name}}" id="{{form.ifsc.id_for_label}}" value="{{form.ifsc.value}}" maxlength="20">
+                    {% else %}
+                        <input class="form-control" type="text" name="{{form.ifsc.name}}" id="{{form.ifsc.id_for_label}}" value="" maxlength="20">
+                    {% endif %}
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="{{form.address.id_for_label}}">Address</label>
+                    {% if form.address.value %}
+                        <textarea class="form-control" name="{{form.address.name}}" id="{{form.address.id_for_label}}" rows="3" maxlength="1000">
+                            {{form.address.value}}
+                        </textarea>
+                    {% else %}
+                        <textarea class="form-control" name="{{form.address.name}}" id="{{form.address.id_for_label}}" rows="3" maxlength="1000"></textarea>
+                    {% endif %}
+                </div>
+
+                <div class="agent-pro-btn text-center">
+                    <button class="btn btn-primary" type="submit">Update Profile</button>
+                </div>
+
+                <div class="col-12">
+                    <div class="container p-2 text-center" style="background-color:#fad5a2; font-size:13px;">
+                        <p>
+                            nb: If you want to change your area / locality, please contact the administrator
+                            by call &nbsp;<a href="tel:+919495495516"><i class="fa fa-phone"></i></a>&nbsp; or
+                            mail &nbsp;<a href="mailto:info@izado.in"><i class="fa fa-envelope"></i></a>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/common/jquery.validate.js' %}"></script>
+<script src="{% static 'js/delivery_agent/agent_profile.js' %}"></script>
+{% endblock %}

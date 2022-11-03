@@ -1,0 +1,106 @@
+{% extends 'delivery_agent/base_agent.html' %}
+
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="history-section m-0">
+            <form action="{% url 'agent_transactions' %}" id="idForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="id_date_from">Date From</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input aria-describedby="date-design-prepend" class="form-control" id="id_date_from" name="date_from" type="date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="id_date_to">Date To</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input aria-describedby="date-design-prepend" class="form-control" id="id_date_to" name="date_to" type="date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="history-btn text-center">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section>
+    {% if all_transactions %}
+    <div class="container mb-3">
+        <div class="tree-sction-container p-1">
+            {% for i in all_transactions %}
+                <div class="tree-section">
+                    <div class="row">
+                        <div class="col-lg-6 col-6">
+                            <div class="completed-left">
+                                <h6>{{i.transaction_id}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <div class="completed-left">
+                                <h6>{{i.created|date:'j-N-Y'}}</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-6">
+                            <div class="completed-left">
+                                {% if i.is_cod %}
+                                    <h6>Total amount collected : {{ i.total_order_amount|add:i.total_amount }}</h6>
+                                {% else %}
+                                    <h6>Total amount credited : {{ i.total_order_amount|add:i.total_amount }}</h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <div class="completed-left p-0">
+                                <h6>Your commission : {{i.amount}}</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-6">
+                            <div class="completed-left">
+                                {% if i.is_cod %}
+                                    <h6 class="m-0 p-0">Payment mode is COD</h6>
+                                {% else %}
+                                    <h6 class="m-0 p-0">Payment mode is UPI</h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-6">
+                            <div class="completed-left p-0">
+                                {% if i.is_cod %}
+                                    <h6 class="m-0 p-0">You need to pay : {{ i.total_order_amount|add:i.platform_amount }}</h6>
+                                {% else %}
+                                    <h6 class="m-0 p-0">You will be paid : {{ i.amount }}</h6>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}

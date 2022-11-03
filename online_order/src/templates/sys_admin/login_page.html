@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DoorDropp | Admin</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+</head>
+<style>
+    label {
+      display: inline-block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    input,
+    textarea {
+      font-size: 14px;
+      display: block;
+      height: 100%;
+      width: 100%;
+      padding: 5px 10px;
+      background: none;
+      background-image: none;
+      border: 1px solid #a0b3b0;
+      color: #545f58;
+      border-radius: 6px;
+      -webkit-transition: border-color .25s ease, box-shadow .25s ease;
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+    .red_star{
+        color:#d94848;
+    }
+    .frm_fld{
+        font-size: 12px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        height: auto;
+    }
+
+    .frm_fld input{
+        font-size: 12px;
+    }
+    .messages{
+        position: absolute;
+        top: 100px;
+        right: 220px;
+        bottom: 0;
+        left: 240px;
+    }
+    @media only screen and (max-width: 575px){
+
+        /* -------- message -----------*/
+        .messages{
+            position: absolute;
+            top: 20px;
+            right: 16px;
+            bottom: 0;
+            left: 15px;
+        }
+    }
+    @media only screen and (min-width: 576px) and (max-width: 767px){
+
+		/* -------- message -----------*/
+		.messages{
+		    position: absolute;
+		    top: 45px;
+		    right: 10px;
+		    bottom: 0;
+		    left: 20px;
+		}
+    }
+    @media only screen and (min-width: 768px) and (max-width: 991px){
+
+		/* -------- message -----------*/
+		.messages{
+		    position: absolute;
+		    top: 40px;
+		    right: 100px;
+		    bottom: 0;
+		    left: 220px;
+		}
+    }
+</style>
+<body>
+    <div class="main-wrpr">
+       <div class="container-fluid w-100 p-0">
+           <div class="row w-100 m-0">
+               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 w-100 bg-left"></div>
+               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 d-flex align-items-center login-form-area">
+                    <div class="container">
+                        <div class="row d-flex flex-row justify-content-center">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="">
+                                    {% if messages %}
+                                        <div class="messages">
+                                            {% for message in messages %}
+                                                <div {% if message.tags %} class="{{ message.tags }} alert-dismissible fade show" role="alert"{% endif %}>
+                                                    {{ message }}
+                                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    <span class="tag-text text-center">
+                                        <h4 class="mb-2 mt-2">
+                                            Glad to see you
+                                        </h4>
+                                    </span>
+                                    <form action="{% url 'admin_login' %}" method="POST" class="log-wrpr">
+                                        {% csrf_token %}
+                                        <div class="form-group frm_fld">
+                                            <label for="id_email">Email</label>
+                                            <input type="email" maxlength="256" class="form-control" id="id_email" name="email" placeholder="Email" required>
+                                        </div>
+                                        <div class="form-group frm_fld">
+                                            <label for="id_password">Password</label>
+                                            <input type="password" class="form-control" id="id_password" name="password" placeholder="Password" required>
+                                        </div>
+                                        <br>
+                                        <button type="submit" class="btn btn-log">Login</button>
+                                        <br>
+                                        <a href="">
+                                            <p class="text-center for-pass-text">
+                                                Forgot Password
+                                            </p>
+                                        </a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+           </div>
+       </div>
+    </div>
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/common/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/admin_scripts.js' %}"></script>
+</body>
+</html>

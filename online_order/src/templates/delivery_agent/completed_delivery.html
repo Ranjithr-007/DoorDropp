@@ -1,0 +1,76 @@
+{% extends 'delivery_agent/base_agent.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .identify_section{
+        box-shadow: var(--shd,0 0 1px 1px rgba(0,0,0,.4));
+        border-radius: 10px;
+    }
+    .today-delivery-sction {
+        box-shadow: var(--shd,0 0 0 rgba(0,0,0,.4));
+        border-radius: 0px;
+    }
+</style>
+
+<section>
+    <div class="container pb-3">
+        <div class="today-delivery-sction mt-4">
+            <div class="todays-head">
+                <h5>COMPLETED DELIVERY</h5>
+                {% for i in all_completed_delivery_orders %}
+                <div class="identify_section mb-2 pb-2">
+                    <div class="today-dl-txt">
+                        <div class="row">
+                            <div class="col-6 col-lg-6">
+                                <div class="lable-section">
+                                    <h4><strong>Order Id :</strong> {{i.delivery_id}}</h4>
+
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-6">
+                                <div class="lable-section-1">
+                                    <h4><strong>User :</strong> {{i.common_user.name}}</h4>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12">
+                                <div class="lable-section">
+                                    <h4><strong>Address :</strong> {{i.common_user.address}}, &nbsp;&nbsp;{{i.common_user.landmark}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="id-status-section">
+                        {% for j in i.orders.all %}
+                        <div class="id-shop">
+                            <div class="row">
+                                <div class="col-1 col-lg-1"><h4>{{forloop.counter}}</h4></div>
+                                <div class="col-4 col-lg-4"><a href="{% url 'individual_user_order_info' order=j.id %}"><h4>{{j.order_id}}</h4></a></div>
+                                <div class="col-5 col-lg-5"><h4>{{j.business.name}}</h4></div>
+                                <div class="col-2 col-lg-2">
+                                    {% if j not in i.picked_orders.all %}
+                                        <a href="{% url 'pick_order_from_shop' delivery=i.id order=j.id %}"><h2>Pick</h2></a>
+                                    {% else %}
+                                        <h6>Picked</h6>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="row detais-btn mt-2">
+                            <div class="col-12">
+                                <a href="{% url 'agent_delivery_info' delivery=i.id %}">
+                                    <button class="btn btn-primary" type="button">Details</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

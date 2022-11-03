@@ -1,0 +1,197 @@
+
+{% extends 'sys_admin/base_admin.html' %}
+{% load static %}
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    {% endblock styles %}
+
+    {% block content %}
+
+
+    <!-- message ----------------------->
+    <div class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="alert-box">
+            <div class="alert alert-warning">
+                <label id="idErrorLabel"></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row box-wrap">
+            <!-- new column 1 added for user form -  user registartion form-->
+            <div class="col-lg-6 col-md-8 col-sm-12">
+
+                <!-- user registration form ----------------------------------->
+                <div class="bg-white regis-box" id="divIdContent">
+                    <form action="{% url 'addDeliveryAgent' %}" id="idForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-box"><!-- form box-->
+                            <div class="reg-wrap">
+                                <h3 class="reg-text">
+                                    Delivery Agent Registration
+                                </h3>
+                                <hr>
+                            </div>
+
+                            <div class="form-group"> <!-- start of user reg form -->
+                                <div class="form-row"> <!-- form row1 -->
+                                    <div class="col-lg-6 col-md-6 frm_fld">
+                                        <label for="{{form.name.id_for_label}}">Name<span class="red_star">*</span></label>
+                                        <input type="text" placeholder="Agent Name" name="{{form.name.name}}" id="{{form.name.id_for_label}}" maxlength="100" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 frm_fld">
+                                        <label for="{{form.email.id_for_label}}">Email</label>
+                                        <input type="email" placeholder="eg: test@test.com" name="{{form.email.name}}" id="{{form.email.id_for_label}}" maxlength="256" class="form-control">
+                                    </div>
+
+                                </div><!-- end of form row1 -->
+
+                                <div class="form-row"> <!-- form row2 -->
+
+                                    <div class="col-lg-4 col-md-4 frm_fld">
+                                        <label for="{{form.mobile.id_for_label}}">Mobile Number<span class="red_star">*</span></label>
+                                        <input type="text" minlength="10" placeholder="9876543210" name="{{form.mobile.name}}" id="{{form.mobile.id_for_label}}" maxlength="10" class="form-control" required>
+                                        <span id="errmsg" style="color:red"></span>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 frm_fld">
+                                        <label for="{{form.payment_percentage.id_for_label}}">Payment %<span class="red_star">*</span></label>
+                                        <input type="number" placeholder="80.0" name="{{form.payment_percentage.name}}" id="{{form.payment_percentage.id_for_label}}" step="0.1" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 frm_fld form_sel">
+                                        <label for="{{form.area_specified.id_for_label}}">Area Specified<span class="red_star">*</span></label>
+                                        <select name="{{form.area_specified.name}}" id="{{form.area_specified.id_for_label}}" class="form-control" required>
+                                            <option value="">----------------------</option>
+                                            {% for i in all_area %}
+                                                <option value="{{i.id}}">{{i.area}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12 frm_fld">
+                                        <label for="{{form.address.id_for_label}}">Address</label>
+                                        <textarea name="{{form.address.name}}" id="{{form.address.id_for_label}}" rows="5" class="form-control"></textarea>
+                                    </div>
+
+                                </div><!--end of  form row2 -->
+
+                                <input type="hidden" name="key" id="id_key">
+
+                            </div><!-- end  of user reg form -->
+
+                            <!-- save button -->
+                            <div class="btn-box-wrap">
+                                <button type="submit" id="idSave" class="btn btn-regis">Save</button>
+                            </div>
+
+                        </div><!-- end of form box-->
+                    </form>
+                </div><!-- end of user reg form-->
+                
+            </div><!-- end of new column 1 added for user form-->
+
+            <div class="overlay">
+                <div style="position: absolute;top: 40%;left: 50%;">
+                    <i class="fa fa-spinner fa-spin fa-5x" id="id_loader"></i>
+                </div>
+            </div>
+
+        </div> <!-- end of row1 -->
+
+
+        <div class="row datatablerow"> <!-- start of row2 -->
+            <!-- user table-------------------------------------->
+            <div class="col-12 userpage_table pb-4">
+                    <!--<div class="">-->
+                            <h4 class="table_name">Registered Agents</h4>
+                            <hr>
+                            <!-- searchbar------------------------------------->
+<!--                            <div class="row searchbar_row"> &lt;!&ndash; start of row &ndash;&gt;-->
+
+<!--                                <div class="col-lg-4 col-md-6 float-right">-->
+<!--                                    <div class="input-group">-->
+<!--                                        <input type="search" class="form-control search table_search" aria-label="Search.." placeholder="Enter agents name here.." >-->
+<!--                                        <div class="input-group-append">-->
+<!--                                            <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div> &lt;!&ndash; end of row &ndash;&gt;-->
+
+                            <table id="id_data_table" class="table table-hover bg-white">
+
+                                <thead class="br-bottom" style="background-color: #E5ECF0;">
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Mobile No</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">Area</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for emp in delivery_agents %}
+                                    <tr class="br-bottom clear">
+                                        <td class="name">{{ emp.name }}</td>
+                                        <td>{{ emp.email }}</td>
+                                        <td>{{ emp.mobile }}</td>
+                                        <td>{{ emp.address }}</td>
+                                        <td>{{ emp.area_specified.area }}</td>
+                                        <td>
+                                            <label class="switch">
+                                                {% if emp.is_active %}
+                                                    <a href="{% url 'disableDeliveryAgent' pk=emp.id %}" onclick="return confirm('Are you sure want to disable the Agent?')">
+                                                        <input type="checkbox" checked >
+                                                        <span class="slider round mb-1"></span>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'enableDeliveryAgent' pk=emp.id %}" onclick="return confirm('Are you sure want to enable the Agent?')">
+                                                        <input type="checkbox">
+                                                        <span class="slider round mb-1"></span>
+                                                    </a>
+                                                {% endif %}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <span class="">
+                                                <img src='{% static "img/edit.svg" %}' id="{{ emp.id }}" class="edit-icon-menu" title="Edit Agent">
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'deleteDeliveryAgent' pk=emp.id %}" onclick="return confirm('Are you sure want to delete this Agent?');" title="Delete Agent">
+                                                <span class="fa fa-trash mt-1" style="color: #e04141;"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                    <!-- </div> -->
+
+            </div><!-- end of user table-->
+
+        </div> <!-- end of row2 -->
+
+    </div><!--end of container -->
+
+    {% load static %}
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/DataTables-1.10.24/js/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'js/sys_admin/add_delivery_agent.js' %}"></script>
+
+{% endblock %}

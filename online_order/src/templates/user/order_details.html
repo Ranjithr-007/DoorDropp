@@ -1,0 +1,156 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+{% block content %}
+
+<section class="pt-3">
+    <div class="container-fluid shop-section">
+        <div class="container">
+            <div class="clearfix"></div>
+            <form action="{% url 'order_details' order=order %}" enctype="multipart/form-data" id="idForm"
+                      method="post">
+                    {% csrf_token %}
+                <div class="row cam-section">
+                    <div class="area-shop">
+                        <div class="row">
+                            <div class="col-6 col-lg-6"><h4><strong>Order ID :</strong> {{order_object.order_id}}</h4>
+                            </div>
+                            <div class="col-6 col-lg-6"><h5><strong>Shop :</strong> {{order_object.business.name}}</h5>
+                            </div>
+                            <div class="col-6 col-lg-6">
+                                <h4><strong>Order Type :</strong>
+                                    {% if order_object.order_type == 1 %}
+                                        By Form
+                                    {% elif order_object.order_type == 2 %}
+                                        By Upload Sheet
+                                    {% else %}
+                                        By Call
+                                    {% endif %}
+                                </h4>
+                            </div>
+                            <div class="col-6 col-lg-6"><h5><strong>Area :</strong> {{order_object.business.area_specified.area}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="date-time">
+                        <div class="row">
+                            <div class="col-6 col-lg-6"><h4>{{order_object.created | date:'j/N/y - l'}}</h4></div>
+                            <div class="col-6 col-lg-6"><h6>{{order_object.created | time:'h:i A'}}</h6></div>
+                        </div>
+                    </div>
+                    <div class="order-info">
+                        {% if order_object.order_type == 1 %}
+                            {% if order_object.order_details.all %}
+                                <div class="order-text">
+                                    <h6>Order Info</h6>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">SL NO</th>
+                                            <th scope="col">Item</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col"><i class="fas fa-rupee-sign"></i> INR</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for k in order_object.order_details.all %}
+                                        <tr>
+                                            <th style="font-weight: normal;">{{forloop.counter}}</th>
+                                            <td>{{k.item}}</td>
+                                            <td>{{k.quantity}} {{k.unit.short_name}}</td>
+                                            <td>{{k.price}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                                            <th scope="row"></th>
+                                            <td colspan="2" style="font-weight: 600;">Total</td>
+                                            <td style="font-weight: 600;">{{order_object.order_amount}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {% if order_object.order_bill %}
+                                <div class="container">
+                                    <div class="text-center pt-3">
+                                        <img alt="Responsive image" class="w-100" src="{{ order_object.order_bill.url }}" style="max-width:400px; height:auto;">
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            <div class="pb-3 pt-3" style="border-top-left-radius: 3px; border-top-right-radius: 3px; font-size:14px;">
+                                <div class="row">
+                                    <div class="col-8">Total Items in Order</div>
+                                    <div class="col-4 text-left">: {{order_object.order_total_items}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8">Total Amount</div>
+                                    <div class="col-4 text-left">: {{order_object.order_amount}} <i class="fas fa-rupee-sign" style="color: #000; font-size:14px;"></i> </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if order_object.expected_delivery_charge %}
+                            <div class="delivery-details">
+                                <h6>Delivery Details</h6>
+                                <div class="delivery-text">
+                                    <div class="row">
+                                        <div class="col-lg-2 col-5"><h3>Delivery Charge</h3></div>
+                                        <div class="col-lg-10 col-7"><p>{{order_object.expected_delivery_charge}}</p></div>
+
+                                        <div class="col-lg-2 col-5"><h3>Delivery Address</h3></div>
+                                        <div class="col-lg-10 col-7">
+                                            <p>{{order_object.common_user.address}} <br> {{order_object.common_user.landmark}}</p>
+                                        </div>
+                                        <h4 style="text-align: left;">Note : Delivery charge will be optimized if you
+                                            placed more than one order in the day. Optimized delivery charge will
+                                            be displayed in the delivery section!
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="delivery-details" id="pe">
+                            <h6>Payment Details</h6>
+                            <div class="delivery-text">
+                                <div class="row">
+                                    <div class="col-lg-2 col-5"><h3 title="">Delivery Mode</h3></div>
+                                    <div class="col-lg-10 col-7"><p class="mt-1">Scheduled Delivery</p></div>
+
+                                    <div class="col-lg-2 col-5"><h3>Payment Mode</h3></div>
+                                    <div class="col-lg-10 col-7">
+                                        <p class="mt-1">Pay on Delivery(Cash or UPI)</p>
+                                    </div>
+                                    <h4 style="text-align: left;">Note : More payment modes, delivery modes will be open soon, and we currently
+                                        deliver orders once in a day(usually from 4PM to 6PM). You can pay directly
+                                        to our delivery agent or via UPI at the time of delivery.
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="delivery-details text-center">
+                            <h6>Order Status</h6>
+                            {% if order_object.status == 1 %}
+                                <p><span style="color:#d96907; font-size:13px;">Waiting for {{order_object.business.name}} to review the order</span></p>
+                            {% elif order_object.status == 3 %}
+                                <p><span style="color:#f52100; font-size:13px;">{{order_object.business.name}} rejected the order</span></p>
+                            {% elif order_object.status == 12 %}
+                                <p><span style="color:#f52100; font-size:13px;">You cancelled the order</span></p>
+                            {% elif order_object.status == 8 or order_object.status == 9 or order_object.status == 10 or order_object.status == 11 %}
+                                <p><span style="color:#017305; font-size:13px;">Order successfully delivered</span></p>
+                            {% elif order_object.status == 5 or order_object.status == 6 or order_object.status == 7 %}
+                                <p><span style="color:#d96907; font-size:13px;">Order is processing..</span></p>
+                            {% endif %}
+                        </div>
+                        {% if order_object.status == 1 %}
+                            <div class="order-submit text-center pb-4">
+                              <button class="btn btn-secondary" type="button" onclick="window.location.assign('{% url 'cancel_order' order=order_object.id %}')">Cancel</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

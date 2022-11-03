@@ -1,0 +1,151 @@
+
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+{% block content %}
+    <style>
+        .selected_color{
+            background-color:#e3aa68;
+        }
+        .dropdown-item{
+            font-size:12px;
+        }
+        .dropdown-menu{
+            min-width: 100%;
+        }
+    </style>
+    <section>
+        <div class="loction-myorder">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-lg-6">
+                        <div class="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="md-form active-cyan active-cyan-2">
+                                <form action="{% url 'user_home' ar=ar %}" id="idForm" method="post" enctype="multipart/form-data">{% csrf_token %}
+                                    <select name="area" id="id_area" class="form-control">
+                                        {% for i in all_area %}
+                                            {% if ar == i.id %}
+                                                <option value="{{i.id}}" selected>{{i.area}}, {{i.village.village}}</option>
+                                            {% else %}
+                                                <option value="{{i.id}}">{{i.area}}, {{i.village.village}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <input name="change_area" hidden>
+                                </form>
+                            </div>
+                            <label for="id_area">
+                                <i class="fas fa-angle-down" id="change_area_drop"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-6">
+                        <div class="mobile-view">
+                            <div class="search-box-mobile">
+                                <form class="d-flex">
+                                    <input aria-label="Search" class="form-control search" placeholder="Search" type="search">
+                                    <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container-fluid">
+            <div class="banner">
+                <div class="carousel slide" data-bs-ride="carousel" id="carouselExampleIndicators">
+                    {% if all_banner_images %}
+                        <div class="carousel-indicators">
+                            {% for i in all_banner_images %}
+                                {% if i.name == '1' %}
+                                    <button aria-current="true" aria-label="Slide {{forloop.counter}}" class="active"
+                                        data-bs-slide-to="{{forloop.counter0}}" data-bs-target="#carouselExampleIndicators" type="button">
+                                    </button>
+                                {% else %}
+                                    <button aria-label="Slide {{forloop.counter}}" data-bs-slide-to="{{forloop.counter0}}" data-bs-target="#carouselExampleIndicators"
+                                    type="button">
+                                    </button>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="carousel-inner">
+                            {% for i in all_banner_images %}
+                                {% if i.name == '1' %}
+                                    <div class="carousel-item active">
+                                        <img class="d-block w-100 img-fluid" src="{{i.image_url.url}}" alt="...">
+                                    </div>
+                                {% else %}
+                                    <div class="carousel-item">
+                                        {% if i.image_url %}
+                                            <img class="d-block w-100 img-fluid" src="{{i.image_url.url}}" alt="...">
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleIndicators"
+                                type="button">
+                            <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleIndicators"
+                                type="button">
+                            <span aria-hidden="true" class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container-fluid shop-section">
+            <div class="container">
+                <div class="sort-btn">
+                    <div class="dropdown set-new">
+                        <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                id="dropdownMenuButton1" type="button">
+                            Categories
+                            <i class="fas fa-sliders-h"></i>
+                        </button>
+                        {% if all_category_to_display %}
+                            <ul aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
+                                {% for i in all_category_to_display %}
+                                    <li><a class="dropdown-item" href="{% url 'business_list' category=i.id ar=ar %}">{{i.store_type}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="row pb-5">
+                    {% for i in all_category_to_display %}
+                        <div class="col-6 col-lg-3">
+                            <a href="{% url 'business_list' category=i.id ar=ar %}">
+                                <div class="shop-box clear">
+                                    {% if i.display_image %}
+                                        <img class="img-fluid" src="{{i.display_image.url}}" alt="Card image cap">
+                                    {% else %}
+                                        <img class="img-fluid" src="{% static 'img/shop-2.jpg' %}" alt="Card image cap">
+                                    {% endif %}
+                                    <h5 class="search_name">{{i.store_type}}</h5>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/user/homepage.js' %}"></script>
+
+{% endblock %}

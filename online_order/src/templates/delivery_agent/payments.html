@@ -1,0 +1,280 @@
+{% extends 'delivery_agent/base_agent.html' %}
+
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/agent_payment_style.css' %}">
+<style>
+    @media screen and (max-width: 499px){
+        .history-section .form-control {
+            display: block;
+            padding: 3px;
+            font-size: 10px;
+        }
+   }
+</style>
+<section class="mb-3">
+    <div class="container">
+        <div class="payment-notificaton">
+            <div class="pay-noti">
+                <div class="row">
+                    <div class="col-8 col-lg-10"><h6>Your commission percentage</h6></div>
+                    <div class="col-4 col-lg-2">
+                        {% if payment_percentage %}
+                        <h6>: {{ payment_percentage }} %</h6>
+                        {% else %}
+                            <h6>: 80.0 %</h6>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if all_incomplete_trans_cod_count or all_incomplete_trans_count %}
+                <div class="pay-noti-1">
+                    <div class="row">
+                        <div class="col-8 col-lg-10"><h6>Total no of incomplete transactions</h6></div>
+                        <div class="col-4 col-lg-2">
+                            <h6>: {{all_incomplete_trans_cod_count|add:all_incomplete_trans_count}}
+                                (UPI-{{all_incomplete_trans_count}}, COD-{{all_incomplete_trans_cod_count}})
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="pay-noti">
+                    <div class="row">
+                        <div class="col-8 col-lg-10"><h6>Amount you need to pay - COD</h6></div>
+                        <div class="col-4 col-lg-2"><h6>: {{platform_amount_due_cod}}</h6></div>
+                    </div>
+                </div>
+                <div class="pay-noti-1">
+                    <div class="row">
+                        <div class="col-8 col-lg-10"><h6>Your commission - COD</h6></div>
+                        <div class="col-4 col-lg-2"><h6>: {{agent_amount_due_cod}}</h6></div>
+                    </div>
+                </div>
+                <div class="pay-noti">
+                    <div class="row">
+                        <div class="col-8 col-lg-10"><h6>Your Commission - UPI</h6></div>
+                        <div class="col-4 col-lg-2"><h6>: {{agent_amount_due}}</h6></div>
+                    </div>
+                </div>
+                {% if total_amount > 0 %}
+                    <div class="pay-noti-1">
+                        <div class="row">
+                            <div class="col-8 col-lg-10"><h6><strong>Total amount you need to pay</strong></h6></div>
+                            <div class="col-4 col-lg-2"><h6><strong>: {{total_amount}}</strong></h6></div>
+                        </div>
+                    </div>
+                    <p>You can pay the total amount to the admin account through UPI or bank transfer which are
+                        given below. The admin will confirm your payment and notify you
+                        when it is updated. Pay the actual amount at the time of the transaction to
+                        avoid misunderstandings.
+                    </p>
+                    <div class="row mt-1">
+                        <div class="col-4"><p>UPI ID</p></div>
+                        <div class="col-6">
+                            <p>
+                                <strong id="strIdUpiId">{{company_account_details.ADMIN_UPI_ID}}</strong>
+                                &nbsp;&nbsp;
+                                <i class="fa fa-clone" id="cpyUpiId"></i>
+                            </p>
+                        </div>
+                        <div class="col-2"><p><span id="spnIdUpiId" style="display:none;">Copied</span></p></div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-4"><p>Account Name</p></div>
+                        <div class="col-6">
+                            <p>
+                                <strong id="strIdAccName">{{company_account_details.ACC_NAME}}</strong>
+                                &nbsp;&nbsp;
+                                <i class="fa fa-clone" aria-hidden="true" id="cpyAccName"></i>
+                            </p>
+                        </div>
+                        <div class="col-2"><p><span id="spnIdAccName" style="display:none;">Copied</span></p></div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-4"><p>Account No.</p></div>
+                        <div class="col-6">
+                            <p>
+                                <strong id="strIdAccNumber">{{company_account_details.ACC_NO}}</strong>
+                                &nbsp;&nbsp;
+                                <i class="fa fa-clone" aria-hidden="true" id="cpyAccNumber"></i>
+                            </p>
+                        </div>
+                        <div class="col-2"><p><span id="spnIdAccNumber" style="display:none;">Copied</span></p></div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-4"><p>IFSC</p></div>
+                        <div class="col-6">
+                            <p>
+                                <strong id="strIdIfsc">{{company_account_details.IFSC}}</strong>
+                                &nbsp;&nbsp;
+                                <i class="fa fa-clone" aria-hidden="true" id="cpyAccIfsc"></i>
+                            </p>
+                        </div>
+                        <div class="col-2"><p><span id="spnIdAccIfsc" style="display:none;">Copied</span></p></div>
+                    </div>
+                {% else %}
+                    <div class="pay-noti-1">
+                        <div class="row">
+                            <div class="col-8 col-lg-10"><h6><strong>The total amount you will be paid</strong></h6></div>
+                            <div class="col-4 col-lg-2"><h6><strong>: {{total_amount|abs}}</strong></h6></div>
+                        </div>
+                    </div>
+                    <p>Don't worry the total amount will be paid every day and you will be notified when the payment is made if
+                        you have not already updated the payment details, please update immediately from the profile
+                        section.
+                    </p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="mb-3">
+    <div class="container">
+        <div class="history-section m-0">
+            <form action="{% url 'agent_payments' %}" enctype="multipart/form-data" id="idForm" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-4 col-lg-4">
+                        <div class="form-group">
+                            <label for="id_date_from">Date From</label>
+                            <input class="form-control" id="id_date_from" name="date_from" type="date">
+                        </div>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <div class="form-group">
+                            <label for="id_date_to">Date To</label>
+                            <input class="form-control" id="id_date_to" name="date_to" type="date">
+                        </div>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <div class="form-group">
+                            <label for="id_payment_type">Type</label>
+                            <select class="form-control" id="id_payment_type" name="payment_type">
+                                <option value="">------------------</option>
+                                <option value="credit">Debit</option>
+                                <option value="debit">Credit</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="history-btn text-center">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section>
+    {% if all_transactions %}
+    <div class="container">
+        {% for i in all_transactions %}
+            {% if i.is_debit %}
+            <div class="credit-section mb-3">
+                <div class="row">
+                    <div class="col-lg-6 col-6"><h6>{{i.reference_id}}</h6></div>
+                    <div class="col-lg-6 col-6"><h5>{{i.created|date:'j-N-Y'}}</h5></div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-lg-6 col-6"><p>Total Amount : {{i.amount}}</p></div>
+                    <div class="col-lg-6 col-6"><span>{{i.pay_by}}</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-4"><h4 style="text-align: left;">Transaction ID</h4></div>
+                    <div class="col-lg-4 col-4"><h4>Amount</h4></div>
+                    <div class="col-lg-4 col-4"><h4 style="text-align: right;">Date</h4></div>
+                </div>
+                <hr class="p-0 m-0 mb-1">
+                {% for j in i.transactions.all %}
+                    <div class="row">
+                        <div class="col-lg-4 col-4"><h4 style="text-align: left;">{{j.transaction_id}}</h4></div>
+                        {% if j.is_cod %}
+                            <div class="col-lg-4 col-4"><h4>{{j.gross_amount|sub:j.amount }}</h4></div>
+                        {% else %}
+                            <div class="col-lg-4 col-4"><h4>{{j.amount}}</h4></div>
+                        {% endif %}
+                        <div class="col-lg-4 col-4"><h4 style="text-align: right;">{{j.created|date:'j-N-Y'}}</h4></div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if i.is_credit %}
+            <div class="debit-section mb-3">
+                <div class="row">
+                    <div class="col-lg-6 col-6"><h6>{{i.reference_id}}</h6></div>
+                    <div class="col-lg-6 col-6"><h5>{{i.created|date:'j-N-Y'}}</h5></div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col-lg-6 col-6"><p>Total Amount : {{i.amount}}</p></div>
+                    <div class="col-lg-6 col-6"><span>{{i.pay_by}}</span></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-4"><h4 style="text-align: left;">Transaction ID</h4></div>
+                    <div class="col-lg-4 col-4"><h4>Amount</h4></div>
+                    <div class="col-lg-4 col-4"><h4 style="text-align: right;">Date</h4></div>
+                </div>
+                <hr class="p-0 m-0 mb-1">
+                {% for j in i.transactions.all %}
+                    <div class="row">
+                        <div class="col-lg-4 col-4"><h4 style="text-align: left;">{{j.transaction_id}}</h4></div>
+                        {% if j.is_cod %}
+                            <div class="col-lg-4 col-4"><h4>{{j.gross_amount|sub:j.amount }}</h4></div>
+                        {% else %}
+                            <div class="col-lg-4 col-4"><h4>{{j.amount}}</h4></div>
+                        {% endif %}
+                        <div class="col-lg-4 col-4"><h4 style="text-align: right;">{{j.created|date:'j-N-Y'}}</h4></div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script>
+$(document).ready( function(){
+    $("#spnIdUpiId").hide();
+    $("#spnIdAccNumber").hide();
+    $("#spnIdAccName").hide();
+    $("#spnIdAccIfsc").hide();
+});
+
+$("#cpyAccIfsc").click( function(){
+    copyToClipboard($("#strIdIfsc"));
+    $("#spnIdAccIfsc").show();
+    $("#spnIdAccIfsc").fadeOut(5000);
+});
+
+$("#cpyAccNumber").click( function(){
+    copyToClipboard($("#strIdAccNumber"));
+    $("#spnIdAccNumber").show();
+    $("#spnIdAccNumber").fadeOut(5000);
+});
+
+$("#cpyAccName").click( function(){
+    copyToClipboard($("#strIdAccName"));
+    $("#spnIdAccName").show();
+    $("#spnIdAccName").fadeOut(5000);
+});
+
+$("#cpyUpiId").click( function(){
+    copyToClipboard($("#strIdUpiId"));
+    $("#spnIdUpiId").show();
+    $("#spnIdUpiId").fadeOut(5000);
+});
+
+function copyToClipboard(element) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+}
+
+</script>
+
+{% endblock %}

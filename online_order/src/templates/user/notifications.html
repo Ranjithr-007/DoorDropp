@@ -1,0 +1,76 @@
+{% extends 'user/base_user.html' %}
+{% load static %}
+{% block content %}
+
+<section class="pt-3 pb-5">
+    <div class="container pb-4">
+        <div class="notification-section">
+            {% for i in all_notifications %}
+                {% if i.order %}
+                    {% if i.order.status == 2 %}
+                        <a href="{% url 'order_confirmation' order=i.order.id %}" style="text-decoration:none;">
+                            <div {% if i.is_read %} class="notifiction-box-1 mt-2" {% else %} class="notifiction-box mt-2" {% endif %}>
+                                <div class="row">
+                                    <div class="col-lg-12 col-12"><h6>{{i.message}}</h6></div>
+                                    <div class="col-lg-6 col-6"><h4>{{i.order.business}}</h4></div>
+                                    <div class="col-lg-6 col-6"><h5>{{i.created|date:'j/N/y, h:i A'}}</h5></div>
+                                </div>
+                            </div>
+                        </a>
+                    {% elif i.order.status == 4 %}
+                        <a href="{% url 'order_placed' order=i.order.id %}" style="text-decoration:none;">
+                            <div {% if i.is_read %} class="notifiction-box-1 mt-2" {% else %} class="notifiction-box mt-2" {% endif %}>
+                                <div class="row">
+                                    <div class="col-lg-12 col-12"><h6>{{i.message}}</h6></div>
+                                    <div class="col-lg-6 col-6"><h4>{{i.order.business}}</h4></div>
+                                    <div class="col-lg-6 col-6"><h5>{{i.created|date:'j/N/y, h:i A'}}</h5></div>
+                                </div>
+                            </div>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'order_details' order=i.order.id %}" style="text-decoration:none;">
+                            <div {% if i.is_read %} class="notifiction-box-1 mt-2" {% else %} class="notifiction-box mt-2" {% endif %}>
+                                <div class="row">
+                                    <div class="col-lg-12 col-12"><h6>{{i.message}}</h6></div>
+                                    <div class="col-lg-6 col-6"><h4>{{i.order.business}}</h4></div>
+                                    <div class="col-lg-6 col-6"><h5>{{i.created|date:'j/N/y, h:i A'}}</h5></div>
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% elif i.delivery_order %}
+                    <a href="{% url 'user_delivery_details' delivery=i.delivery_order.id %}" style="text-decoration:none;">
+                        <div {% if i.is_read %} class="notifiction-box-1 mt-2" {% else %} class="notifiction-box mt-2" {% endif %}>
+                            <div class="row">
+                                <div class="col-lg-12 col-12"><h6>{{i.message}}</h6></div>
+                                <div class="col-lg-6 col-6"><h4>{{i.delivery_order.delivery_agent.name}}</h4></div>
+                                <div class="col-lg-6 col-6"><h5>{{i.created|date:'j/N/Y, h:i A'}}</h5></div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script>
+    $(document).ready( function(){
+        update_user_notification();
+    });
+
+    function update_user_notification(){
+        $.ajax({
+            type: 'GET',
+            dataType : 'JSON',
+            url:  '/update-user-notification',
+            async:  false,
+            data:{},
+            success:function(data){
+<!--                console.log(data);-->
+            }
+        });
+    }
+</script>
+{% endblock %}

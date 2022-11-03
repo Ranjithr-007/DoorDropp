@@ -1,0 +1,151 @@
+{% extends 'business/base_business.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .order-id-section h6{
+        font-size: 12px;
+    }
+
+    .order-id-section h5 {
+        font-size: 12px;
+    }
+
+    .order-table h3 {
+        font-size: 14px;
+    }
+
+    .delivery-details h6 {
+        font-size: 14px;
+    }
+</style>
+<section>
+    <div class="container">
+        <div class="order-price-section">
+            <div class="order-id-section">
+                <div class="row">
+                    <div class="col-6 col-lg-6"><h5>{{order_object.order_id}}</h5></div>
+                    <div class="col-6 col-lg-6"><h6>{{order_object.common_user.name}}</h6></div>
+                    <div class="col-6 col-lg-6">
+                        <h5>
+                            {% if order_object.order_type == 1 %}
+                               Order By Form
+                            {% elif order_object.order_type == 1 %}
+                               Order By Upload Sheet
+                            {% else %}
+                               Order By Call
+                            {% endif %}
+                        </h5>
+                    </div>
+                    <div class="col-6 col-lg-6"><h6>{{order_object.business.area_specified.area}}</h6></div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-12"><h5>{{order_object.created | date:'l  -  j/N/y'}} &nbsp;&nbsp;&nbsp;&nbsp; {{order_object.created | time:'h:i A'}}</h5></div>
+                </div>
+            </div>
+
+            <div class="order-table">
+                {% if order_object.order_type == 1 %}
+                    {% if order_object.order_details.all %}
+                        <h3>Order Info</h3>
+                        <table class="table order-info-business-row">
+                            <thead>
+                            <tr style="border-bottom: 1px solid #e2e2e2;">
+                                <th scope="col">No.</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col"><i class="fas fa-rupee-sign" style="color: #000;"></i>INR</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in order_object.order_details.all %}
+                            <tr>
+                                <th style="font-weight: normal;">{{forloop.counter}}</th>
+                                <td>{{i.item}}</td>
+                                <td>{{i.quantity}}&nbsp;{{i.unit.short_name}}</td>
+                                <td>{{i.price}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr class="total-font" style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                                <th scope="row"></th>
+                                <td colspan="2" style="font-weight: 600;">Total</td>
+                                <td style="font-weight: 600;">{{order_object.order_amount}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    {% endif %}
+                {% else %}
+                    {% if order_object.order_bill %}
+                        <div class="container">
+                            <div class="text-center pt-3">
+                                <img alt="Responsive image" class="w-100" src="{{ order_object.order_bill.url }}" style="max-width:400px; height:auto;">
+                            </div>
+                        </div>
+                        <hr>
+                    {% endif %}
+                    <div class="pb-3 pt-3" style="border-top-left-radius: 3px; border-top-right-radius: 3px; font-size:14px;">
+                        <div class="row">
+                            <div class="col-8">Total Items in Order</div>
+                            <div class="col-4 text-left">: {{order_object.order_total_items}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">Total Amount</div>
+                            <div class="col-4 text-left">: {{order_object.order_amount}} <i class="fas fa-rupee-sign" style="color: #000; font-size:14px;"></i> </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="delivery-details">
+                    <h6>Delivery Details</h6>
+                    <div class="delivery-text">
+                        <div class="row">
+                            <div class="col-lg-2 col-4"><h3>Address :</h3></div>
+                            <div class="col-lg-10 col-8">
+                                <p>{{order_object.common_user.address}} <br>
+                                    {{order_object.common_user.landmark}} &nbsp;(Landmark)</p>
+                            </div>
+                            <div class="col-12">
+                                <h5 style="font-size:14px;">Need to contact customer?&nbsp;&nbsp;<a href="tel:+91{{order_object.common_user.mobile}}" style="text-decoration:none;">Contact</a></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="delivery-details text-center">
+                    <h6>Order Status</h6>
+                    <div class="status_text pt-3" style="font-size:13px;">
+                        {% if order_object.status == 1 %}
+                            <p><span style="color:#d96907;">Order is open. please review the order</span></p>
+                        {% elif order_object.status == 2 %}
+                            <p><span style="color:#d96907;">You reviewed and accepted the order</span></p>
+                        {% elif order_object.status == 3 %}
+                            <p><span style="color:#f52100;">You rejected the order</span></p>
+                        {% elif order_object.status == 4 %}
+                            <p><span style="color:#d96907;">Waiting for {{order_object.common_user.name}}'s verification</span></p>
+                        {% elif order_object.status == 12 %}
+                            <p><span style="color:#f52100;">{{order_object.common_user.name}} cancelled the order</span></p>
+                        {% elif order_object.status == 8 %}
+                            <p><span style="color:#017305;">Order Delivered</span></p>
+                        {% elif order_object.status == 5 %}
+                            <p><span style="color:#d96907;">Order packing is processing..</span></p>
+                        {% elif order_object.status == 6 %}
+                            <p><span style="color:#d96907;">Order packing is completed</span></p>
+                        {% elif order_object.status == 7 %}
+                            <p><span style="color:#d96907;">Agent picked the order</span></p>
+                        {% elif order_object.status == 9 %}
+                            <p><span style="color:#f52100;">Order failed to deliver</span></p>
+                        {% elif order_object.status == 10 %}
+                            <p><span style="color:#017305;">Order delivered and payment received</span></p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if order_object.status == 5 %}
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="button" onclick="window.location.assign('{% url 'order_processing' order=order_object.id %}')">Packed</button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

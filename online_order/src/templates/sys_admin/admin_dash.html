@@ -1,0 +1,160 @@
+
+{% extends 'sys_admin/base_admin.html' %}
+
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+{% endblock styles %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+<!--    <div class="container" style="margin-bottom: 40px;">-->
+<!--        <div class="row mb-2 fir-box-dash">-->
+<!--            <div class="col-lg-8">-->
+<!--                <span class="">-->
+<!--                    <h5 class="over-txt5">-->
+<!--                        Overview-->
+<!--                    </h5>-->
+<!--                </span>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4">-->
+<!--                <div class="btn-grp">-->
+<!--                    <button class="btn btn-today">Today</button>-->
+<!--                    <button class="btn btn-week">Week</button>-->
+<!--                    <button class="btn btn-year">Year</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-lg-4">-->
+<!--                <div class="stat-box bg-white">-->
+<!--                    <div class="text-sel-wrpr">-->
+<!--                        <span class="">-->
+<!--                            <h6 class="stat-h6">-->
+<!--                                Seller of the Day-->
+<!--                            </h6>-->
+<!--                        </span>-->
+<!--                    </div>-->
+<!--                    <div class="img-sel-wrpr">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-4">-->
+<!--                                <span class="">-->
+<!--                                    <img src="img/food.png" alt="" class="-fd-img">-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                            <div class="col-8">-->
+<!--                                <p class="-fd-p-stat">Vegitable Salad</p>-->
+<!--                                <p class="-fd-p2-stat">43 Sold</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4">-->
+<!--                <div class="stat-box bg-white">-->
+<!--                    <div class="text-sel-wrpr">-->
+<!--                        <span class="">-->
+<!--                            <h6 class="stat-h6">-->
+<!--                                Seller of the Week-->
+<!--                            </h6>-->
+<!--                        </span>-->
+<!--                    </div>-->
+<!--                    <div class="img-sel-wrpr">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-4">-->
+<!--                                <span class="">-->
+<!--                                    <img src="img/food.png" alt="" class="-fd-img">-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                            <div class="col-8">-->
+<!--                                <p class="-fd-p-stat">Vegitable Salad</p>-->
+<!--                                <p class="-fd-p2-stat">250 Sold</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4">-->
+<!--                <div class="stat-box bg-white">-->
+<!--                    <div class="text-rev-wrpr">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-6">-->
+<!--                                <span class="">-->
+<!--                                    <h6 class="stat-h6" style="margin: 0px;">-->
+<!--                                        Revenue-->
+<!--                                    </h6>-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                            <div class="col-6" style="border-left: 1px solid #D8D8D8;">-->
+<!--                                <span class="">-->
+<!--                                    <h6 class="stat-h6" style="margin: 0px;">-->
+<!--                                        Profit-->
+<!--                                    </h6>-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="data-text-wrpr">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-6">-->
+<!--                                <span class="">-->
+<!--                                    <h1 class="stat-rev-h1">-->
+<!--                                        $695-->
+<!--                                    </h1>-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                            <div class="col-6">-->
+<!--                                <span class="">-->
+<!--                                    <h1 class="stat-prof-h1">-->
+<!--                                        25%-->
+<!--                                    </h1>-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 p-2">
+                <a href="{% url 'agent_payment_home' %}" style="text-decoration:none;">
+                    <div class="card text-center" style="background-color:#63eb87;">
+                        <div class="card-body">
+                            <strong>Agent Payment</strong>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 p-2">
+                <a href="{% url 'business_payment_home' %}" style="text-decoration:none;">
+                    <div class="card text-center" style="background-color:#63eb87;">
+                        <div class="card-body">
+                            <strong style="font-color:#1b3823;">Business Payment</strong>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 p-2">
+                <a href="" style="text-decoration:none;">
+                    <div class="card text-center" style="background-color:#63eb87;">
+                        <div class="card-body">
+                            <strong style="font-color:#1b3823;">Platform Account</strong>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

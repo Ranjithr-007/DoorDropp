@@ -1,0 +1,234 @@
+{% extends 'delivery_agent/base_agent.html' %}
+
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="agent-order-section">
+            <div class="agent-id-btns">
+                <ul class="nav nav-pills center-pills  mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button aria-controls="pills-home" aria-selected="true" class="nav-link active"
+                                data-bs-target="#pills-home" data-bs-toggle="pill" id="pills-home-tab" role="tab"
+                                type="button">Today
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button aria-controls="pills-profile" aria-selected="false" class="nav-link"
+                                data-bs-target="#pills-profile" data-bs-toggle="pill" id="pills-profile-tab" role="tab"
+                                type="button">This Week
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button aria-controls="pills-contact" aria-selected="false" class="nav-link"
+                                data-bs-target="#pills-contact" data-bs-toggle="pill" id="pills-contact-tab" role="tab"
+                                type="button">This Month
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div aria-labelledby="pills-home-tab" class="tab-pane fade show active" id="pills-home"
+                         role="tabpanel">
+                        <div class="today-container text-center">
+                            <div class="row">
+                                <div class="col-12 col-lg-3"><h5>Total Delivery Taken
+                                    <span>: {{no_of_delivery_today}}</span></h5></div>
+                                <div class="col-12 col-lg-3"><h5>Total Delivery Amount <span>: {{tot_delivery_amount_today}}</span>
+                                </h5></div>
+                                <div class="col-12 col-lg-6">
+                                    <h5>Total Amount Collected
+                                        <span>: {{total_amount_collected_today}}</span>
+                                        &nbsp;&nbsp;(Cash: {{amount_by_cash_today}}, Upi: {{amount_by_upi_today}})
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div aria-labelledby="pills-profile-tab" class="tab-pane fade" id="pills-profile" role="tabpanel">
+                        <div class="today-container text-center">
+                            <div class="row">
+                                <div class="col-12 col-lg-3"><h5>Total Delivery Taken <span>: {{no_of_delivery_this_week}}</span>
+                                </h5></div>
+                                <div class="col-12 col-lg-3"><h5>Total Delivery Amount <span>: {{tot_delivery_amount_this_week}}</span>
+                                </h5></div>
+                                <div class="col-12 col-lg-6">
+                                    <h5>Total Amount Collected
+                                        <span>: {{total_amount_collected_this_week}}</span>
+                                        &nbsp;&nbsp;(Cash: {{amount_by_cash_this_week}}, Upi:
+                                        {{amount_by_upi_this_week}})
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div aria-labelledby="pills-contact-tab" class="tab-pane fade" id="pills-contact" role="tabpanel">
+                        <div class="today-container text-center">
+                            <div class="row">
+                                <div class="col-12 col-lg-3"><h5>Total Delivery Taken <span>: {{no_of_delivery_this_month}}</span>
+                                </h5></div>
+                                <div class="col-12 col-lg-3"><h5>Total Delivery Amount <span>: {{tot_delivery_amount_this_month}}</span>
+                                </h5></div>
+                                <div class="col-12 col-lg-6">
+                                    <h5>Total Amount Collected
+                                        <span>: {{total_amount_collected_this_month}}</span>
+                                        &nbsp;&nbsp;(Cash: {{amount_by_cash_this_month}}, Upi:
+                                        {{amount_by_upi_this_month}})
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="check-btn">
+        <div class="container">
+            <div class="row">
+                <div class="col-9 col-lg-7"><h2>Check out today's completed deliveries</h2></div>
+                <div class="col-3 col-lg-5">
+                    <button class="btn btn-primary" type="button" onclick="window.location.assign('{% url 'check_out_completed_delivery' %}')">Go</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <h6 style="color: #0084ad;">Today's Delivery</h6>
+        <div class="today-delivery-sction mt-4">
+            <div class="todays-head">
+                <h5>OPEN DELIVERY</h5>
+                <div id="divIdOpenDelivery">
+                    {% for i in all_open_delivery_orders %}
+                        <div class="today-dl-txt">
+                            <div class="row">
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section">
+                                        <h4><strong>User :</strong> {{i.common_user.name}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section-1">
+                                        <h4><strong>Area :</strong> {{i.area_specified.area}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section">
+                                        <h4><strong>Mobile :</strong> {{i.common_user.mobile}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section-1">
+                                        <h4><strong>Land Mark :</strong> {{i.common_user.landmark}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-12">
+                                    <div class="lable-section">
+                                        <h4><strong>Address :</strong> {{i.common_user.address}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="id-status-section">
+                            {% for j in i.orders.all %}
+                            <div class="id-shop">
+                                <div class="row">
+                                    <div class="col-6 col-lg-6"><a href="{% url 'individual_user_order_info' order=j.id %}"><h4>{{j.order_id}}</h4></a></div>
+                                    <div class="col-6 col-lg-6"><h4>{{j.business.name}}</h4></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <p>Status : Order is open</p>
+                            <hr>
+                            <div class="row detais-btn">
+                                <div class="col-12">
+                                    <a href="{% url 'take_delivery_order' delivery=i.id %}"
+                                       onclick="return confirm('Are you sure want to take this delivery?')">
+                                        <button class="btn btn-primary" type="button">I will deliver this order</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container mt-3 mb-5">
+        <div class="today-delivery-sction mt-4">
+            <div class="todays-head">
+                <h5>DELIVERY PROCESSING</h5>
+                <div id="divIdDeliveryProcessing">
+                    {% for i in all_processing_delivery_orders %}
+                        <div class="today-dl-txt" id="ongoing_{{i.id}}">
+                            <div class="row">
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section">
+                                        <h4><strong>User :</strong> {{i.common_user.name}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section-1">
+                                        <h4><strong>Area :</strong> {{i.area_specified.area}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section">
+                                        <h4><strong>Mobile :</strong> {{i.common_user.mobile}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-6">
+                                    <div class="lable-section-1">
+                                        <h4><strong>Land Mark :</strong> {{i.common_user.landmark}}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-12">
+                                    <div class="lable-section">
+                                        <h4><strong>Address :</strong> {{i.common_user.address}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="id-status-section">
+                            {% for j in i.orders.all %}
+                                <div class="id-shop">
+                                    <div class="row">
+                                        <div class="col-3 col-lg-3"><a href="{% url 'individual_user_order_info' order=j.id %}"><h4>{{j.order_id}}</h4></a></div>
+                                        <div class="col-4 col-lg-4"><h4>{{j.business.name}}</h4></div>
+                                        <div class="col-3 col-lg-3"><h4>{{j.order_total_items}} Items</h4></div>
+                                        <div class="col-2 col-lg-2">
+                                            {% if j not in i.picked_orders.all %}
+                                                <a href="{% url 'pick_order_from_shop' delivery=i.id order=j.id %}"><h2>Pick</h2></a>
+                                            {% else %}
+                                                <h6>Picked</h6>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <p>Status : Order is Processing..</p>
+                            <hr>
+                            <div class="row detais-btn">
+                                <div class="col-12">
+                                    <a href="{% url 'agent_delivery_info' delivery=i.id %}">
+                                        <button class="btn btn-primary" type="button">Details</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/delivery_agent/agent_dash.js' %}"></script>
+{% endblock %}

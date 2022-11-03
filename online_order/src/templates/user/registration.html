@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DoorDropp</title>
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+<!--    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">-->
+</head>
+<style>
+
+    .validate_cus {
+      color: #a94442;
+      font-size: small;
+    }
+
+    .panel100{
+        width: 100%;
+        box-sizing: border-box;
+        background: #f1d5d5;
+        height: auto;
+        border: 1px solid #f1b2a6;
+        box-shadow: 1px 1px 5px rgba(100,100,100,.1);
+        display: none;
+    }
+
+    #errorContainer{
+        display:none;
+    }
+
+    #errorContainer ul{
+        list-style-type: none;
+        display: block;
+        padding: 10px;
+        margin: 0px;
+    }
+
+    #errorContainer li{
+        font-size: 12px;
+        list-style-type: none;
+        display: list-item;
+    }
+
+    #errorContainer li label{
+        margin: 0px;
+    }
+
+    #errorContainerTwo{
+        display:none;
+    }
+
+    #errorContainerTwo ul{
+        list-style-type: none;
+        display: block;
+        padding: 10px;
+        margin: 0px;
+    }
+
+    #errorContainerTwo li{
+        font-size: 12px;
+        list-style-type: none;
+        display: list-item;
+    }
+
+    #errorContainerTwo li label{
+        margin: 0px;
+    }
+
+    .error{
+        color: #af2206;
+    }
+
+    .error-valid{
+        border: 1px solid #af2206;
+    }
+
+    .success-valid{
+        border: 1px solid #00940f;
+    }
+
+    label {
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    input,
+    textarea {
+      font-size: 12px;
+      display: block;
+      height: 100%;
+      width: 100%;
+      padding: 5px 10px;
+      background: none;
+      background-image: none;
+      border: 1px solid #a0b3b0;
+      color: #545f58;
+      border-radius: 6px;
+      -webkit-transition: border-color .25s ease, box-shadow .25s ease;
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .red_star{
+        color:#d94848;
+    }
+
+    .frm_fld{
+        font-size: 12px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        height: auto;
+    }
+
+    .frm_fld input{
+        font-size: 12px;
+    }
+
+    .form_sel select{
+		font-size: 12px;
+	}
+
+	.bg-left{
+        height: 0vh;
+	}
+
+</style>
+<body>
+    <div class="main-wrpr">
+       <div class="container-fluid w-100 p-0">
+           <div class="row w-100 m-0">
+               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 w-100 bg-left"></div>
+               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 d-flex align-items-center login-form-area">
+                    <div class="container">
+                        <div class="row d-flex flex-row justify-content-center">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="">
+                                    <div class="container">
+                                        {% if messages %}
+                                            <div class="messages">
+                                                {% for message in messages %}
+                                                    <div {% if message.tags %} class="{{ message.tags }} alert-dismissible fade show"{% endif %}>
+                                                        {{ message }}
+                                                        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="panel100">
+                                    <!--Mandatory Common Error Display Div-->
+                                        <div id="errorContainer">
+                                            <ul></ul>
+                                        </div><!-- Jquery Validator Container -->
+                                    </div>
+
+                                    <div class="panel100" id="divIdError">
+                                    <!--Mandatory Common Error Display Div-->
+                                        <div id="errorContainerTwo">
+                                            <ul></ul>
+                                        </div><!-- Jquery Validator Container -->
+                                    </div>
+
+                                    <span class="tag-text text-center">
+                                        <h4 class="mb-2 mt-2">
+                                            Registration
+                                        </h4>
+                                    </span>
+
+                                    <form action="{% url 'user_register' %}" method="POST" class="log-wrpr" id="idForm">
+                                        {% csrf_token %}
+                                        <div class="form-group frm_fld">
+                                            <label for="{{form.name.id_for_label}}">Name</label><span class="red_star">*</span>
+                                            <input type="text" class="form-control" maxlength="100" id="{{form.name.id_for_label}}" name="{{form.name.name}}" placeholder="Your Name" required><span class=""></span>
+                                        </div>
+                                        <div class="form-group frm_fld">
+                                            <label for="{{form.email.id_for_label}}">Email</label>
+                                            <input type="email" class="form-control" maxlength="100" id="{{form.email.id_for_label}}" name="{{form.email.name}}" placeholder="Email Address">
+                                        </div>
+                                        <div class="form-group frm_fld">
+                                            <label for="{{form.mobile.id_for_label}}">Mobile</label><span class="red_star">*</span>
+                                            <input type="text" class="form-control" minlength="10" maxlength="10" id="{{form.mobile.id_for_label}}" name="{{form.mobile.name}}" placeholder="Mobile Number" required>
+                                        </div>
+                                        <div class="form-group frm_fld">
+                                            <label for="id_password">Password</label><span class="red_star">*</span>
+                                            <input type="password" class="form-control" id="id_password" name="password" placeholder="Minimum 6 characters" required>
+                                        </div>
+                                        <div class="form-group frm_fld">
+                                            <label for="id_conf_password">Confirm Password</label><span class="red_star">*</span>
+                                            <input type="password" class="form-control" id="id_conf_password" name="conf_password" placeholder="Confirm The Password" required>
+                                        </div>
+                                        <div class="form-group frm_fld form_sel">
+                                            <label for="id_village">Village</label><span class="red_star">*</span>
+                                            <select name="village" id="id_village" class="form-control" required>
+                                                <option value="" selected>Choose...</option>
+                                                {% for i in all_village %}
+                                                    <option value="{{i.id}}">{{i.village}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group frm_fld form_sel">
+                                            <label for="id_area">Locality</label><span class="red_star">*</span>
+                                            <select name="area" id="id_area" class="form-control" required>
+                                                <option value="">Choose...</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group frm_fld form_sel">
+                                            <label for="{{form.security_question.id_for_label}}">Security Question</label>
+                                            {{form.security_question}}
+                                        </div>
+                                        <div class="form-group frm_fld">
+                                            <label for="{{form.answer.id_for_label}}">Answer</label>
+                                            <input type="text" class="form-control" maxlength="100" id="{{form.answer.id_for_label}}" name="{{form.answer.name}}" placeholder="Your Answer">
+                                        </div>
+                                        <br>
+                                        <button type="submit" class="btn btn-log" id="idBtnRegister">Register</button>
+                                        <br>
+                                        <p class="text-center for-pass-text">
+                                            Already Registered? <a href="{% url 'user_login' %}">Login Here</a>
+                                        </p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+           </div>
+       </div>
+    </div>
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/common/jquery.validate.js' %}"></script>
+    <script src="{% static 'js/user/registration.js' %}"></script>
+</body>
+</html>

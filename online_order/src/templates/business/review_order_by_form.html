@@ -1,0 +1,70 @@
+{% extends 'business/base_business.html' %}
+
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="order-price-section mt-5 bg-white">
+            <form id="frmIdForm" action="{% url 'review_order' order=order order_type=order_type %}" method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
+                <div class="order-id-section">
+                    <div class="row">
+                        <div class="col-6 col-lg-6"><h5>{{order_object.order_id}}</h5></div>
+                        <div class="col-6 col-lg-6"><h6>{{order_object.common_user.name}}</h6></div>
+                        <div class="col-6 col-lg-6"><h4>{{order_object.business.area_specified.area}}</h4></div>
+                        <div class="col-6 col-lg-6"><h3>{{order_object.created|date:'j/N/y  h:i A'}}</h3></div>
+                    </div>
+                </div>
+                <div class="order-table">
+                    <p>Need any query? <a href="tel:+91{{order_object.common_user.mobile}}" style="text-decoration:none;">Call Customer</a></p>
+                    <table class="table order-row">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #7be0ff;">
+                                <th scope="col">No.</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col"><i class="fas fa-rupee-sign" style="color: #000;"></i>INR</th>
+                                <th scope="col" title="Item Not Available Now">NA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in order_object.order_details.all %}
+                                <tr>
+                                    <th style="font-weight: normal;">{{forloop.counter}}</th>
+                                    <td>{{i.item}}</td>
+                                    <td>{{i.quantity}} {{i.unit.short_name}}</td>
+                                    <td><input type="number" class="item_price" step="0.1" name="price_{{i.id}}" id="id_price_{{i.id}}" style="width:60px;" required></td>
+                                    <td>
+                                        <a href="{% url 'delete_item_from_order' order=order pk=i.id %}" onclick="return confirm('Are you sure want to remove this item?')">
+                                            <i class="far fa-times-circle"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr class="total-font" style="border-top:1px solid #54b2cf; border-bottom:1px solid #54b2cf;">
+                                <th scope="row"></th>
+                                <td colspan="2" style="font-weight: 600;">Total</td>
+                                <td style="font-weight: 600;" id="id_total_price"></td>
+                            </tr>
+<!--                            <tr class="total-font">-->
+<!--                                <th scope="row"></th>-->
+<!--                                <td colspan="2" style="font-weight: 600;"><label for="id_allow_credit">Allow Credit to {{order_object.common_user.name}}?</label></td>-->
+<!--                                <td><input type="checkbox" name="allow_credit" id="id_allow_credit" class=""></td>-->
+<!--                            </tr>-->
+                        </tbody>
+                    </table>
+                    <input type="hidden" id="id_total" name="total" value="">
+                </div>
+                <div class="text-center pb-3">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <button class="btn btn-secondary" type="button" onclick="window.location.assign('{% url 'reject_order' order=order_object.id %}')">Reject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/business/review_order_by_form.js' %}"></script>
+{% endblock %}

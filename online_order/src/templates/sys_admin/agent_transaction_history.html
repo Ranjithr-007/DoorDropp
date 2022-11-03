@@ -1,0 +1,169 @@
+{% extends 'sys_admin/base_admin.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+{% endblock styles %}
+
+{% block content %}
+
+<!-- message ----------------------->
+<div class="container">
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="alert-box">
+        <div class="alert alert-warning">
+            <label id="idErrorLabel"></label>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 frm_fld">
+            <form action="{% url 'agent_transaction_history' %}" id="idForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- search and filter alarms-->
+                <div class="form-group">
+                    <div class="form-row">
+                        <!-- date from-->
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 frm_fld form_sel">
+                            <label for="id_date_from">Date From</label>
+                            <input type="date" name="date_from" id="id_date_from" class="form-control">
+                        </div>
+                        <!-- date-->
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 frm_fld form_sel">
+                            <label for="id_date_to">Date To</label>
+                            <input type="date" name="date_to" id="id_date_to" class="form-control">
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 frm_fld form_sel">
+                            <label for="id_delivery_agent">Agent</label>
+                            <select name="delivery_agent" id="id_delivery_agent" class="form-control">
+                                <option value="">----------------</option>
+                                {% for i in all_delivery_agents %}
+                                    <option value="{{i.id}}">{{i.name}} -- {{i.mobile}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 frm_fld form_sel">
+                            <label for="id_payment_status">Payment Status</label>
+                            <select name="payment_status" id="id_payment_status" class="form-control">
+                                <option value="">----------------</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <!-- search button-->
+                    <div class="text-center">
+                        <input type="submit" id="idSave" class="btn btn-regis" value="Search">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div><!--end of row -->
+</div>
+
+<div class="container-fluid">
+    <div class="row datatablerow"> <!-- start of row2 -->
+        <!-- user table-------------------------------------->
+        <div class="col-12 userpage_table pb-4">
+            <h4 class="table_name">Agent Transaction History</h4>
+            <hr>
+            <table id="id_data_table" class="table table-hover bg-white">
+                <thead class="br-bottom" style="background-color: #E5ECF0;">
+                    <tr>
+                        <th scope="col">Transaction ID</th>
+                        <th scope="col">Agent</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Area</th>
+                        <th scope="col">Gross Amount</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Agent Commission</th>
+                        <th scope="col">Platform Amount</th>
+                        <th scope="col">Delivery Order</th>
+                        <th scope="col">Delivery Type</th>
+                        <th scope="col">Tran. Amt</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Dated</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for emp in all_agent_transactions %}
+                    <tr class="br-bottom clear">
+                        <td class="name">{{ emp.transaction_id }}</td>
+                        <td>{{ emp.delivery_agent.name }}</td>
+                        <td>{{ emp.delivery_agent.mobile }}</td>
+                        <td>{{ emp.delivery_agent.area_specified.area }}</td>
+                        <td>{{ emp.gross_amount }}</td>
+                        <td>{{ emp.total_amount }}</td>
+                        <td>{{ emp.amount }}</td>
+                        <td>{{ emp.platform_amount }}</td>
+                        <td>{{ emp.delivery_order.delivery_id }}</td>
+                        <td>
+                            {% if emp.is_cod %}
+                                COD
+                            {% else %}
+                                UPI
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if emp.is_cod %}
+                                <label style="color:green;">{{ emp.gross_amount|sub:emp.amount }}</label>
+                            {% else %}
+                                <label style="color:red;">{{ emp.amount }}</label>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if emp.is_completed %}
+                                Completed
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </td>
+                        <td>{{ emp.created|date:'j-N-y' }}</td>
+                        <td>
+                            {% if not emp.is_completed %}
+                                {% if emp.is_cod %}
+                                    <a href="{% url 'agent_transaction_payment' tr=emp.id tp='credit' %}" style="text-decoration:none;" onclick="return confirm('Are you sure about this transaction? amount {{emp.gross_amount|sub:emp.amount}}/- will be credited to Admin Account');">
+                                        <button class="btn btn-warning p-1" style="font-size:10px;">Receive</button>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'agent_transaction_payment' tr=emp.id tp='debit' %}" style="text-decoration:none;" onclick="return confirm('Are you sure about this transaction? amount {{emp.amount}}/- will be debited from Admin Account');">
+                                        <button class="btn btn-success p-1" style="font-size:10px;">Pay</button>
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <i class="fa fa-check"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div><!-- end of user table-->
+
+    </div> <!-- end of row2 -->
+
+</div><!--end of container -->
+
+{% load static %}
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="{% static 'DataTables/DataTables-1.10.24/js/dataTables.bootstrap4.js' %}"></script>
+<script>
+    $(document).ready( function(){
+        $('#id_data_table').DataTable();
+    });
+</script>
+
+{% endblock %}

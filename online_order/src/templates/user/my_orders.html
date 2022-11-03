@@ -1,0 +1,168 @@
+{% extends 'user/base_user.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .myorder-search select {
+        border: 1px solid #c4c4c4;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 3px 5px;
+        width: 100%;
+        font-size: 12px;
+    }
+    .my-orders .order-pending,
+    .my-orders .order-cancel,
+    .my-orders .order-success{
+        height:auto;
+        margin: 0px;
+    }
+</style>
+
+<section>
+    <div class="container">
+<!--        <h5 class="pt-4">My Orders</h5>-->
+        <div class="myorder-search">
+            <form action="{% url 'my_orders' %}" id="idForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-lg-3 pl-lg-1">
+                        <div class="date-section">
+                            <label for="id_date_from">Date From</label>
+                            <input id="id_date_from" class="w-100" name="date_from" type="date">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-3">
+                        <div class="date-section">
+                            <label for="id_date_to">Date To</label>
+                            <input id="id_date_to" class="w-100" name="date_to" type="date">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-3">
+                        <div class="date-section">
+                            <label for="id_order_type">Order Type</label>
+                            <select id="id_order_type" name="order_type" class="form-control select2 select2-hidden-accessible">
+                                <option value="">Choose..</option>
+                                <option value="1">By Form</option>
+                                <option value="2">By Upload Sheet</option>
+                                <option value="3">By Call</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6 col-lg-3 pr-1-lg">
+                        <div class="date-section">
+                            <label for="id_status">Status</label>
+                            <select id="id_status" name="status" class="form-control select2 select2-hidden-accessible">
+                                <option value="">Choose..</option>
+                                <option value="1" title="When you opened a new order, business need to review the order">Opened</option>
+                                <option value="2" title="After business review order, you need to confirm the order">To confirm</option>
+                                <option value="3">Rejected</option>
+                                <option value="4" title="When you confirm the order">Confirmed</option>
+                                <option value="5" title="When you placed the order after confirmation">Placed</option>
+                                <option value="7" title="When delivery agent pickup your order to deliver">To deliver</option>
+                                <option value="8" title="When delivery agent delivered the order">Delivered</option>
+                                <option value="12" title="When you cancelled the order">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="order-btn text-center">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container">
+        <div class="my-orders">
+            <div class="row">
+                {% for i in all_orders %}
+                    {% if i.status == 2 %}
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <a href="{% url 'order_confirmation' order=i.id %}">
+                                <div class="order-pending mb-2">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                        <div class="col-6 col-lg-6"><h5>{{i.business.name}}</h5></div>
+                                        <div class="col-6 col-lg-6"><h4>{{i.created|date:'l - j/N/Y - h:i A'}}</h4></div>
+                                        <div class="col-6 col-lg-6"><h4 style="color:#015e75;">{{i.business.name}} is reviewed the order, please confirm the order</h4></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% elif i.status == 4 %}
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <a href="{% url 'order_placed' order=i.id %}">
+                                <div class="order-pending mb-2">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                        <div class="col-6 col-lg-6"><h5>{{i.business.name}}</h5></div>
+                                        <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                        <div class="col-6 col-lg-6"><h4 style="color:#015e75;">You Confirmed, please place the order</h4></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="col-12 col-sm-12 col-lg-4">
+                            <a href="{% url 'order_details' order=i.id %}">
+                                {% if i.status == 12 %}
+                                    <div class="order-cancel mb-2">
+                                        <div class="row">
+                                            <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                            <div class="col-6 col-lg-6"><h5>{{i.business.name}}</h5></div>
+                                            <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                            <div class="col-6 col-lg-6"><h4 style="color:#f52100;">You cancelled the order</h4></div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {% if i.status == 1 %}
+                                        <div class="order-pending mb-2">
+                                            <div class="row">
+                                                <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h5>{{i.business.name}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                                <div class="col-6 col-lg-6"><h4 style="color:#d96907;">Waiting for {{i.business.name}} to review the order</h4></div>
+                                            </div>
+                                        </div>
+                                    {% elif i.status == 8 or i.status == 9 or i.status == 10 or i.status == 11 %}
+                                        <div class="order-success mb-2">
+                                            <div class="row">
+                                                <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h5>{{i.business.name}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                                <div class="col-6 col-lg-6"><h4 style="color:#12a102;">Delivered</h4></div>
+                                            </div>
+                                        </div>
+                                    {% elif i.status == 3 %}
+                                        <div class="order-cancel mb-2">
+                                            <div class="row">
+                                                <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h5>{{i.business.name}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                                <div class="col-6 col-lg-6"><h4 style="color:#f52100;">{{i.business.name}} rejected the order</h4></div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="order-pending mb-2">
+                                            <div class="row">
+                                                <div class="col-6 col-lg-6"><h5>{{i.order_id}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h5>{{i.business.name}}</h5></div>
+                                                <div class="col-6 col-lg-6"><h4>{{i.created|date:'l, j/N/Y, h:i A'}}</h4></div>
+                                                <div class="col-6 col-lg-6"><h4 style="color:#d96907;">Processing the order...</h4></div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+{% endblock %}

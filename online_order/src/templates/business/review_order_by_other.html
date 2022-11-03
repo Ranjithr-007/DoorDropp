@@ -1,0 +1,180 @@
+{% extends 'business/base_business.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .file-upload-wrpr-2 {
+        width: 100%;
+        background-color: #F1F5F8;
+        height: 250px;
+        border:1px dashed #707070;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .cam-img-svg{
+       width: 30px;
+       height: auto;
+       margin-right: 10px;
+    }
+    .profile-pic-2 {
+        width: 100%;
+        border-radius: 10px;
+        display: flex;
+        height: 100%;
+    }
+    .-hidden {
+        display: none;
+    }
+
+    <!--    .form_input select{-->
+    <!--        padding: .1rem .3rem;-->
+    <!--        font-size: 0.9rem;-->
+    <!--        line-height: 1;-->
+    <!--        height: 1.5rem;-->
+    <!--    }-->
+    <!--    .form_input input{-->
+    <!--        padding: .1rem .3rem;-->
+    <!--        font-size: 0.9rem;-->
+    <!--        line-height: 1;-->
+    <!--        height: 1.5rem;-->
+    <!--    }-->
+</style>
+
+
+<section>
+    <div class="container pt-3 pb-3">
+        <div class="order-id-section">
+            <div class="row">
+                <div class="col-6 col-lg-6"><h5>{{order_object.order_id}}</h5></div>
+                <div class="col-6 col-lg-6"><h6>{{order_object.common_user.name}}</h6></div>
+                <div class="col-6 col-lg-6"><h4>{{order_object.business.area_specified.area}}</h4></div>
+                <div class="col-6 col-lg-6"><h3>{{order_object.created|date:'j/N/y h:i A'}}</h3></div>
+            </div>
+        </div>
+        {% if order_type == 2 %}
+            {% if order_object.order_list_image %}
+                <div class="upload-screenshot text-center pt-2">
+                    <img alt="Responsive image" class="img-fluid" src="{{ order_object.order_list_image.url }}">
+                </div>
+            {% endif %}
+        {% endif %}
+        <div class="items-list bg-white">
+            <form action="{% url 'review_order' order=order order_type=order_type %}" enctype="multipart/form-data"
+                  id="frmIdForm" method="post">{% csrf_token %}
+                <p>Need any query? <a href="tel:+91{{order_object.common_user.mobile}}" style="text-decoration:none;">Call Customer</a></p>
+
+                <!--                <div class="form-group">-->
+<!--                    <div class="form-row d-flex">-->
+<!--                        <div class="col-5 col-lg-5">-->
+<!--                            <div class="form-outline">-->
+<!--                                <label class="form-label">Item</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-2 col-lg-2">-->
+<!--                            <div class="form-outline">-->
+<!--                                <label class="form-label">Qty</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-2 col-lg-2">-->
+<!--                            <div class="form-outline">-->
+<!--                                <label class="form-label">Unit</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-2 col-lg-2">-->
+<!--                            <div class="form-outline">-->
+<!--                                <label class="form-label">Price</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-1 col-lg-1">-->
+<!--                            <label class="form-label">+/-</label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <div class="pb-3 form_input">-->
+<!--                        {{ formset.management_form }}-->
+<!--                        <div class="form-row pt-1 d-flex">-->
+<!--                            {% for fr in formset %}-->
+<!--                                <div class="col-5 col-lg-5">-->
+<!--                                    <div class="form-outline">-->
+<!--                                        {{fr.item}}-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-2 col-lg-2">-->
+<!--                                    <div class="form-outline">-->
+<!--                                        {{fr.quantity}}-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-2 col-lg-2">-->
+<!--                                    <div class="form-outline">-->
+<!--                                        {{fr.unit}}-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-2 col-lg-2">-->
+<!--                                    <div class="form-outline">-->
+<!--                                        {{fr.price}}-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-1 col-lg-1 mt-1">-->
+<!--                                    <button class="btn-success add-form-row">+</button>-->
+<!--                                </div>-->
+<!--                            {% endfor %}-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <hr>-->
+                <div class="form-group pb-3">
+                    <div class="row">
+                        <div class="col-lg-4 pb-1">
+                            <label class="form-label" for="id_no_of_items">Total Items</label>
+                            <input type="number" class="form-control" name="no_of_items" id="id_no_of_items" step="1" required>
+                        </div>
+                        <div class="col-lg-4 pb-1">
+                            <label class="form-label" for="id_total_amount">Total Amount &nbsp;</label><i class="fas fa-rupee-sign" style="color: #000; font-size:14px;"></i>
+                            <input type="number" class="form-control" name="total_amount" id="id_total_amount" step="0.1" required>
+                        </div>
+                        <div class="col-lg-4 pb-1">
+                            <label class="form-label" for="id_weight">Estimated Weight in KG</label>
+                            <input type="number" class="form-control" name="weight" id="id_weight" step="0.1" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
+                            <label for="file-upload">Upload Bill</label>
+                            <div class="file-upload-wrpr-2">
+                                <img src="{% static 'img/camera.svg' %}" alt="click_me" class="cam-img-svg">
+                                <span class="upload-text">Upload Bill</span>
+                                <img class="profile-pic-2" src="">
+                            </div>
+                            <input type="file" accept="image/*" name="order_bill" id="file-upload" capture="user" class="-hidden" multiple>
+                        </div>
+                    </div>
+                </div>
+
+<!--                <div class="row">-->
+<!--                    <div class="col-8 text-right">-->
+<!--                        <label><strong>Total</strong></label>-->
+<!--                    </div>-->
+<!--                    <div class="col-4 text-left">-->
+<!--                        <label><strong id="id_total_price"></strong></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <hr>-->
+                <div class="col-12">
+                    <div class="text-center">
+                        <button class="btn btn-primary btn-md" type="submit">Submit</button>
+                        <button class="btn btn-secondary" type="button" onclick="window.location.assign('{% url 'reject_order' order=order_object.id %}')">Reject</button>
+                    </div>
+                </div>
+<!--                <input type="hidden" id="id_total" name="total" value="">-->
+            </form>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/business/review_order_by_other.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+{% block content %}
+
+<style>
+    .file-upload-wrpr-2 {
+        width: 100%;
+        background-color: #F1F5F8;
+        height: 300px;
+        border:1px dashed #707070;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .cam-img-svg{
+       width: 30px;
+       height: auto;
+       margin-right: 10px;
+    }
+    .profile-pic-2 {
+        width: 100%;
+        border-radius: 10px;
+        display: flex;
+        height: 100%;
+    }
+    .-hidden {
+        display: none;
+    }
+    .dropdown-item{
+        font-size:12px;
+    }
+    .dropdown-menu{
+        min-width: 100%;
+    }
+</style>
+
+<section>
+    <div class="container-fluid shop-section pt-3 pb-3">
+        <div class="container">
+            <h5>New Order</h5>
+            <div class="sort-btn">
+                <div class="dropdown">
+                    {% if all_category_to_display %}
+                        <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                id="dropdownMenuButton1" type="button">
+                            Categories<i class="fas fa-sliders-h"></i>
+                        </button>
+                        <ul aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
+                            {% for i in all_category_to_display %}
+                                <li><a class="dropdown-item" href="{% url 'business_list' category=i.id ar=ar %}">{{i.store_type}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row campaign_sec">
+                <div class="area-shop">
+                    <div class="row">
+                        <div class="col-6 col-lg-6"><h4>Area : {{business.area_specified.area}}</h4></div>
+                        <div class="col-6 col-lg-6"><h5>Shop : {{business.name}}</h5></div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <button class="inf_collapsible" type="button">
+                        <h3>Order by form</h3>
+                        <i class="fas fa-file-signature"></i>
+                    </button>
+                    <div class="inf_content">
+                        <div class="product-form">
+                            <form id="frmIdForm" action="{% url 'new_order' shop=shop %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="form-row d-flex">
+                                        <div class="col-5 col-lg-5">
+                                            <div class="form-outline">
+                                                <label class="form-label">Item name</label>
+                                            </div>
+                                        </div>
+                                        &nbsp;&nbsp;
+                                        <div class="col-3 col-lg-3">
+                                            <div class="form-outline">
+                                                <label class="form-label">Qty</label>
+                                            </div>
+                                        </div>
+                                        &nbsp;&nbsp;
+                                        <div class="col-2 col-lg-2">
+                                            <div class="form-outline">
+                                                <label class="form-label">Unit</label>
+                                            </div>
+                                        </div>
+                                        &nbsp;&nbsp;
+                                        <div class="col-1 col-lg-1">
+                                            <label class="form-label">+/-</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ formset.management_form }}
+                                    <div class="form-row d-flex pb-2">
+                                        {% for fr in formset %}
+                                            <div class="col-5 col-lg-5">
+                                                <div class="form-outline">
+                                                    {{fr.item}}
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;
+                                            <div class="col-3 col-lg-3">
+                                                <div class="form-outline">
+                                                    {{fr.quantity}}
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;
+                                            <div class="col-2 col-lg-2">
+                                                <div class="form-outline">
+                                                    {{fr.unit}}
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;
+                                            <div class="mt-1">
+                                                <button class="btn-success add-form-row">+</button>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-md" type="submit">Submit</button>
+                                </div>
+                                <input type="hidden" name="by_form">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <button class="inf_collapsible" type="button">
+                        <h3>Order by Upload Sheet</h3>
+                        <i class="far fa-file-image"></i>
+                    </button>
+                    <div class="inf_content">
+                        <form id="frmIdUploadSheet" action="{% url 'new_order' shop=shop %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="upload-screenshot">
+                                <label for="{{form.order_list_image.id_for_label}}">Upload Sheet</label>
+                                <div class="file-upload-wrpr-2">
+                                    <img src="{% static 'img/camera.svg' %}" alt="click_me" class="cam-img-svg">
+                                    <span class="upload-text">Upload Sheet</span>
+                                    <img class="profile-pic-2" src="">
+                                </div>
+                                {{form.order_list_image}}
+                                <input type="hidden" name="by_upload_sheet">
+                            </div>
+                            <div class="text-center pt-3" id="divIdUpload" style="display:none;">
+                                <button class="btn btn-primary btn-md" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <button class="inf_collapsible" type="button">
+                        <h3>Order by call</h3><i class="fas fa-mobile-alt"></i>
+                    </button>
+                    <div class="inf_content">
+                        <div class="order-call">
+                            <script>
+                                var primary = "{{business.mobile}}";
+                                var secondary = "{{business.secondary_mobile}}";
+                                var manager = "{{business.manager_mobile}}";
+                            </script>
+                            <input type="hidden" id="id_business_by_call" name="business_by_call" value="{{business.id}}">
+                            <p style="font-size:13px;"><a href="tel:+91{{business.mobile}}" id="primary" class="by_call" style="text-decoration:none;">{{business.name}} - {{business.mobile}}</a></p>
+                            {% if business.secondary_mobile and business.secondary_mobile != business.mobile %}
+                                <p style="font-size:13px;"><a href="tel:+91{{business.secondary_mobile}}" id="secondary" class="by_call" style="text-decoration:none;">{{business.name}} - {{business.secondary_mobile}}</a></p>
+                            {% endif %}
+                            {% if business.manager_mobile %}
+                                {% if business.mobile != business.manager_mobile and business.secondary_mobile != business.manager_mobile %}
+                                    <p style="font-size:13px;"><a href="tel:+91{{business.manager_mobile}}" id="manager" class="by_call" style="text-decoration:none;">{{business.manager}} - {{business.manager_mobile}}</a></p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/user/new_order.js' %}"></script>
+{% endblock %}

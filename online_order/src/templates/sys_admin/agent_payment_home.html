@@ -1,0 +1,137 @@
+{% extends 'sys_admin/base_admin.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+{% endblock styles %}
+
+{% block content %}
+
+<!-- message ----------------------->
+<div class="container">
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="alert-box">
+        <div class="alert alert-warning">
+            <label id="idErrorLabel"></label>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 p-2">
+            <a href="{% url 'agent_payment_history' %}" style="text-decoration:none;">
+                <div class="card text-center" style="background-color:#63eb87;">
+                    <div class="card-body">
+                        <strong style="font-color:#1b3823;">Payment History</strong>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-4 p-2">
+            <a href="{% url 'agent_transaction_history' %}" style="text-decoration:none;">
+                <div class="card text-center" style="background-color:#63eb87;">
+                    <div class="card-body">
+                        <strong style="font-color:#1b3823;">Transaction History</strong>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if all_agent_data %}
+<div class="container-fluid">
+    <div class="row datatablerow"> <!-- start of row2 -->
+        <!-- user table-------------------------------------->
+        <div class="col-12 userpage_table pb-4">
+                <!--<div class="">-->
+                        <h4 class="table_name">Pending Transactions</h4>
+                        <hr>
+                        <table id="id_data_table" class="table table-hover bg-white">
+
+                            <thead class="br-bottom" style="background-color: #E5ECF0;">
+                                <tr>
+                                    <th scope="col">Agent</th>
+                                    <th scope="col">Area</th>
+                                    <th scope="col">Mobile No</th>
+                                    <th scope="col">Commission</th>
+                                    <th scope="col">Pending Trans. - UPI</th>
+                                    <th scope="col">Pending Trans. - COD</th>
+                                    <th scope="col">Agent Commission - UPI</th>
+                                    <th scope="col">Agent Commission - COD</th>
+                                    <th scope="col" title="platform_amount = total_order_amount + platform_commission">Platform Amount</th>
+                                    <th scope="col">Gross Amount</th>
+                                    <th scope="col">Total Amount</th>
+                                    <th scope="col">Payment Type</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for emp in all_agent_data %}
+                                {% if emp.all_incomplete_trans_count or emp.all_incomplete_trans_cod_count %}
+                                    <tr class="br-bottom clear">
+                                        <td class="name">{{ emp.agent }}</td>
+                                        <td>{{ emp.area }}</td>
+                                        <td>{{ emp.mobile }}</td>
+                                        {% if emp.payment_percentage %}
+                                            <td>{{ emp.payment_percentage }}%</td>
+                                        {% else %}
+                                            <td>80%</td>
+                                        {% endif %}
+                                        <td>{{ emp.all_incomplete_trans_count }}</td>
+                                        <td>{{ emp.all_incomplete_trans_cod_count }}</td>
+                                        <td>{{ emp.agent_amount_due }}</td>
+                                        <td>{{ emp.agent_amount_due_cod }}</td>
+                                        <td>{{ emp.platform_amount_due_cod }}</td>
+                                        <td>{{ emp.total_gross_amount }}</td>
+                                        {% if emp.total_amount > 0 %}
+                                            <td><label style="color:red;">{{ emp.total_amount }}</label></td>
+                                            <td><label style="color:red;">Debit</label> </td>
+                                            <td>
+                                                <a href="{% url 'agent_all_pending_transaction_payment' trans=emp.transaction_ids tp='debit' amt=emp.total_amount ag=emp.agent_id %}" style="text-decoration:none;" onclick="return confirm('Are you sure about this transaction? amount {{emp.total_amount}}/- will be debited from Admin Account');">
+                                                    <button class="btn btn-success p-1" style="font-size:10px;">Pay</button>
+                                                </a>
+                                            </td>
+                                        {% else %}
+                                            <td><label style="color:green;">{{ emp.total_amount|abs }}</label></td>
+                                            <td><label style="color:green;">Credit</label> </td>
+                                            <td>
+                                                <a href="{% url 'agent_all_pending_transaction_payment' trans=emp.transaction_ids tp='credit' amt=emp.total_amount|abs ag=emp.agent_id %}" style="text-decoration:none;" onclick="return confirm('Are you sure about this transaction? amount {{emp.total_amount|abs}}/- will be credited to Admin Account');">
+                                                    <button class="btn btn-warning p-1" style="font-size:10px;">Receive</button>
+                                                </a>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                <!-- </div> -->
+
+        </div><!-- end of user table-->
+
+    </div> <!-- end of row2 -->
+
+</div><!--end of container -->
+
+{% endif %}
+
+{% load static %}
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.js' %}"></script>
+<script type="text/javascript" charset="utf8" src="{% static 'DataTables/DataTables-1.10.24/js/dataTables.bootstrap4.js' %}"></script>
+<script>
+    $(document).ready( function(){
+        $('#id_data_table').DataTable();
+    });
+</script>
+
+{% endblock %}

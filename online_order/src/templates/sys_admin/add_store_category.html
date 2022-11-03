@@ -1,0 +1,191 @@
+
+{% extends 'sys_admin/base_admin.html' %}
+{% load static %}
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/user.css' %}">
+        <style>
+            .file-upload-wrpr-2 {
+                width: 100%;
+                background-color: #F1F5F8;
+                height: 250px;
+                border:1px dashed #707070;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+            .cam-img-svg{
+               width: 30px;
+               height: auto;
+               margin-right: 10px;
+            }
+            .profile-pic-2 {
+                width: 100%;
+                border-radius: 10px;
+                display: flex;
+                height: 100%;
+            }
+            .-hidden {
+                display: none;
+            }
+        </style>
+    {% endblock styles %}
+
+    {% block content %}
+
+
+    <!-- message ----------------------->
+    <div class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="alert-box">
+            <div class="alert alert-warning">
+                <label id="idErrorLabel"></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row box-wrap">
+            <!-- new column 1 added for user form -  user registartion form-->
+            <div class="col-lg-6 col-md-8 col-sm-12">
+
+                <!-- user registration form ----------------------------------->
+                <div class="bg-white regis-box" id="divIdContent">
+                    <form action="{% url 'addCategory' %}" id="idForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-box"><!-- form box-->
+                            <div class="reg-wrap">
+                                <h3 class="reg-text">
+                                    Add Store Category
+                                </h3>
+                                <hr>
+                            </div>
+
+                            <div class="form-group"> <!-- start of user reg form -->
+                                <div class="form-row"> <!-- form row1 -->
+                                    <div class="col-lg-12 col-md-12 frm_fld">
+                                        <label for="{{form.store_type.id_for_label}}">Store Type</label><span class="red_star">*</span>
+                                        <input type="text" placeholder="Supermarket" name="{{form.store_type.name}}" id="{{form.store_type.id_for_label}}" maxlength="100" class="form-control" required>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 frm_fld">
+                                        <label for="{{form.remarks.id_for_label}}">Remarks</label>
+                                        <textarea name="{{form.remarks.name}}" id="{{form.remarks.id_for_label}}" class="form-control" rows="2"></textarea>
+                                    </div>
+                                    <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
+                                        <div class="form-group frm_fld">
+                                            <label for="{{form.display_image.id_for_label}}">Display Image</label>
+                                            <div class="file-upload-wrpr-2">
+                                                <img src="{% static 'img/camera.svg' %}" alt="click_me" class="cam-img-svg">
+                                                <span class="upload-text">Display Image</span>
+                                                <img class="profile-pic-2" src="">
+                                            </div>
+                                            {{form.display_image}}
+                                        </div>
+                                    </div>
+
+                                </div><!-- end of form row1 -->
+
+                                <input type="hidden" name="key" id="id_key">
+
+                            </div><!-- end  of user reg form -->
+
+                            <!-- save button -->
+                            <div class="btn-box-wrap">
+                                <button type="submit" id="idSave" class="btn btn-regis">Save</button>
+                            </div>
+
+                        </div><!-- end of form box-->
+                    </form>
+                </div><!-- end of user reg form-->
+
+            </div><!-- end of new column 1 added for user form-->
+
+            <div class="overlay">
+                <div style="position: absolute;top: 40%;left: 50%;">
+                    <i class="fa fa-spinner fa-spin fa-5x" id="id_loader"></i>
+                </div>
+            </div>
+
+        </div> <!-- end of row1 -->
+
+
+        <div class="row datatablerow"> <!-- start of row2 -->
+            <!-- user table-------------------------------------->
+            <div class="col-12 userpage_table pb-4">
+                <!--<div class="">-->
+                <h4 class="table_name">Saved Store Category</h4>
+                <hr>
+
+                <table id="id_data_table" class="table table-hover bg-white">
+
+                    <thead class="br-bottom" style="background-color: #E5ECF0;">
+                        <tr>
+                            <th scope="col">Store Type</th>
+                            <th scope="col">Remarks</th>
+                            <th scope="col">Display Image</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for emp in all_category %}
+                        <tr class="br-bottom clear">
+                            <td class="name">{{ emp.store_type }}</td>
+                            <td>{{ emp.remarks }}</td>
+                            {% if emp.display_image %}
+                                <td>Uploaded</td>
+                            {% else %}
+                                <td>Not uploaded</td>
+                            {% endif %}
+                            <td>
+                                <label class="switch">
+                                    {% if emp.is_active %}
+                                        <a href="{% url 'disableUnit' pk=emp.id %}" onclick="return confirm('Are you sure want to disable the Store Category?')">
+                                            <input type="checkbox" checked >
+                                            <span class="slider round mb-1"></span>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'enableUnit' pk=emp.id %}" onclick="return confirm('Are you sure want to enable the Store Category?')">
+                                            <input type="checkbox">
+                                            <span class="slider round mb-1"></span>
+                                        </a>
+                                    {% endif %}
+                                </label>
+                            </td>
+                            <td>
+                                <span class="">
+                                    <img src='{% static "img/edit.svg" %}' id="{{ emp.id }}" class="edit-icon-menu" title="Edit Store Category">
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'deleteUnit' pk=emp.id %}" onclick="return confirm('Are you sure want to delete this Store Category?');" title="Delete Store Category">
+                                    <span class="fa fa-trash mt-1" style="color: #e04141;"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div><!-- end of user table-->
+
+        </div> <!-- end of row2 -->
+
+    </div><!--end of container -->
+
+    {% load static %}
+    <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<!--    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/datatables.js' %}"></script>-->
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/DataTables-1.10.24/js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'DataTables/DataTables-1.10.24/js/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'js/sys_admin/add_store_category.js' %}"></script>
+
+{% endblock %}

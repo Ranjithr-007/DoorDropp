@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>DoorDropp | Admin</title>
+
+        {% load static %}
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'DataTables/DataTables-1.10.24/css/dataTables.bootstrap4.css' %}">
+        {% block styles %} {% endblock styles %}
+
+        <script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/common/bootstrap.bundle.min.js' %}"></script>
+    </head>
+<body>
+    {% load nav_active %}
+    <div class="main-wrpr">
+        <div class="sidebar-wrpr">
+            <div class="logo-wrpr">
+                <div class="r-icon-bar">
+                    <img src="{% static 'img/Combined Shape.png' %}" alt="Menu" srcset="">
+                </div>
+            </div>
+            <ul class="sidebar-list">
+                <a href="{% url 'admin_home' %}" class="text-white">
+                    <li class="{% active request 'admin_home' %}">Dashboard</li>
+                </a>
+                <a href="{% url 'addDeliveryAgent' %}" class="text-white">
+                    <li class="{% active request 'addDeliveryAgent' %}">Delivery Agents</li>
+                </a>
+                <a href="{% url 'addBusiness' %}" class="text-white">
+                    <li class="{% active request 'addBusiness' %}">Business</li>
+                </a>
+                <a href="{% url 'agent_payment_home' %}" class="text-white">
+                    <li class="{% active request 'agent_payment_home' %} {% active request 'agent_payment_history' %} {% active request 'agent_transaction_history' %}">Agent Payment</li>
+                </a>
+                <a href="{% url 'business_payment_home' %}" class="text-white">
+                    <li class="{% active request 'business_payment_home' %} {% active request 'business_payment_history' %} {% active request 'business_transaction_history' %}">Business Payment</li>
+                </a>
+                <a href="{% url 'activityLogs' %}" class="text-white">
+                    <li class="{% active request 'activityLogs' %}">Activity Logs</li>
+                </a>
+            </ul>
+        </div>
+        <div class="dashboard-area">
+            <nav class="main-nav">
+                <div class="r-icon-bar2">
+                    <img src="{% static 'img/black.png'%}" alt="Menu" srcset="">
+                </div>
+                <div class="avatar-img">
+                    <div class="dropdown">
+                        <div class=" dropdown-toggle an-nav-btn" id="dropdownMenu2" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <img src="{% static 'img/cep.jpg'%}" class="nav-avt-img" alt="profile"><span class="an-av-name">{{request.session.admin.email}}</span>
+                        </div>
+                        <div class="dropdown-menu avatar_dropdown_menu" aria-labelledby="dropdownMenu2">
+                            <a class="dropdown-item" href="{% url 'addCategory' %}" type="button" style="font-size: 13px;">Store Category</a>
+                            <a class="dropdown-item" href="{% url 'addPaymentMethod' %}" type="button" style="font-size: 13px;">Payment Method</a>
+                            <a class="dropdown-item" href="{% url 'addUnit' %}" type="button" style="font-size: 13px;">Units</a>
+                            <a class="dropdown-item" href="{% url 'addBannerImages' %}" type="button" style="font-size: 13px;">Banner Image</a>
+                            <a class="dropdown-item" href="{% url 'addDistrict' %}" type="button" style="font-size: 13px;">District</a>
+                            <a class="dropdown-item" href="{% url 'addVillage' %}" type="button" style="font-size: 13px;">Village</a>
+                            <a class="dropdown-item" href="{% url 'addArea' %}" type="button" style="font-size: 13px;">Area</a>
+                            <a class="dropdown-item" href="{% url 'addSettings' %}" type="button" style="font-size: 13px;">Settings</a>
+                            <a class="dropdown-item" href="{% url 'admin_logout' %}" type="button" style="font-size: 13px;">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="dashboard-area-wrpr">
+                {% block content %}
+                {% endblock  %}
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/sys_admin/admin_scripts.js' %}"></script>
+</body>
+</html>

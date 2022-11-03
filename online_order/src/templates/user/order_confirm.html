@@ -1,0 +1,104 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+{% block content %}
+
+<section class="pt-3">
+    <div class="container-fluid shop-section">
+        <div class="container">
+            <div class="clearfix"></div>
+            <form action="{% url 'order_confirmation' order=order %}" id="idForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                <div class="row cam-section">
+                    <div class="area-shop">
+                        <div class="row">
+                            <div class="col-6 col-lg-6"><h4><strong>Order ID :</strong> {{order_object.order_id}}</h4>
+                            </div>
+                            <div class="col-6 col-lg-6"><h5><strong>Shop :</strong> {{order_object.business.name}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="date-time">
+                        <div class="row">
+                            <div class="col-6 col-lg-6"><h4>{{order_object.created | date:'l - j/N/Y'}}</h4></div>
+                            <div class="col-6 col-lg-6"><h6>{{order_object.created | time:'h:i A'}}</h6></div>
+                        </div>
+                    </div>
+                    <div class="order-info">
+                        <h6>Order Info</h6>
+                        {% if order_object.order_type == 1 %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SL NO</th>
+                                        <th scope="col">Item</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col"><i class="fas fa-rupee-sign"></i> INR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for k in order_object.order_details.all %}
+                                        <tr>
+                                            <th style="font-weight: normal;">{{forloop.counter}}</th>
+                                            <td>{{k.item}}</td>
+                                            <td>{{k.quantity}} {{k.unit.short_name}}</td>
+                                            <td>{{k.price}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% if order_object.order_item_not_available.all %}
+                                        <tr style="border-top:1px solid #e2e2e2;">
+                                            <th scope="row"></th>
+                                            <td colspan="4" style="font-weight: 600;"><i>Items not available in shop:</i></td>
+                                        </tr>
+                                        {% for k in order_object.order_item_not_available.all %}
+                                            <tr>
+                                                <th style="font-weight: normal;">{{forloop.counter}}</th>
+                                                <td>{{k.item}}</td>
+                                                <td>{{k.quantity}} {{k.unit.short_name}}</td>
+                                                <td>NA</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <tr style="border-top:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2;">
+                                        <th scope="row"></th>
+                                        <td colspan="2" style="font-weight: 600;">Total</td>
+                                        <td style="font-weight: 600;">{{order_object.order_amount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {% else %}
+                            {% if order_object.order_bill %}
+                                <div class="container">
+                                    <div class="text-center pt-3">
+                                        <img alt="Responsive image" class="w-100" src="{{ order_object.order_bill.url }}" style="max-width:400px; height:auto;">
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            <div class="pb-3 pt-3" style="border-top-left-radius: 3px; border-top-right-radius: 3px; font-size:14px;">
+                                <div class="row">
+                                    <div class="col-8">Total Items in Order</div>
+                                    <div class="col-4 text-left">: {{order_object.order_total_items}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8">Total Amount</div>
+                                    <div class="col-4 text-left">: {{order_object.order_amount}} <i class="fas fa-rupee-sign" style="color: #000; font-size:14px;"></i> </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row text-center pb-4">
+                            <div class="col-6">
+                                <button class="btn btn-primary" type="submit">Proceed</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-secondary" type="button" onclick="window.location.assign('{% url 'cancel_order' order=order_object.id %}')">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

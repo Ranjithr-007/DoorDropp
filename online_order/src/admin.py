@@ -1,0 +1,32 @@
+from django.contrib import admin
+from .models import *
+# Register your models here.
+
+admin.site.register(User)
+admin.site.register(DeliveryAgent)
+admin.site.register(Country)
+admin.site.register(CommonUser)
+admin.site.register(State)
+admin.site.register(District)
+admin.site.register(Village)
+admin.site.register(Area)
+admin.site.register(Units)
+admin.site.register(StoreCategory)
+admin.site.register(ActivityLogs)
+admin.site.register(Business)
+admin.site.register(DefaultSettings)
+admin.site.register(PaymentMethod)
+admin.site.register(BannerImages)
+admin.site.register(Order)
+admin.site.register(UserNotifications)
+admin.site.register(BusinessNotification)
+admin.site.register(DeliveryAgentNotification)
+admin.site.register(OrderDetails)
+admin.site.register(OrderDelivery)
+admin.site.register(SecurityQuestions)
+admin.site.register(AgentPayment)
+admin.site.register(AgentTransactions)
+admin.site.register(BusinessPayment)
+admin.site.register(BusinessTransactions)
+admin.site.register(Account)
+

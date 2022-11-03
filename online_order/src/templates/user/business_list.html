@@ -1,0 +1,167 @@
+{% extends 'user/base_user.html' %}
+
+{% load static %}
+{% block content %}
+<style>
+    .selected_color{
+        background-color:#e3aa68;
+    }
+    .dropdown-item{
+        font-size:12px;
+    }
+    .dropdown-menu{
+        min-width: 100%;
+    }
+</style>
+<section>
+    <div class="loction-myorder">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-6">
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="md-form active-cyan active-cyan-2">
+                            {% for i in all_area %}
+                            {% if ar == i.id %}
+                            <input aria-label="Search" class="form-control w-100"
+                                   placeholder="{{i.area}}, {{i.village.village}}" readonly type="text">
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-6">
+                    <div class="mobile-view">
+                        <div class="search-box-mobile">
+                            <form class="d-flex">
+                                <input aria-label="Search" class="form-control search" placeholder="Search" type="search">
+                                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container-fluid">
+        <div class="banner">
+            <div class="carousel slide" data-bs-ride="carousel" id="carouselExampleIndicators">
+                {% if all_banner_images %}
+                <div class="carousel-indicators">
+                    {% for i in all_banner_images %}
+                    {% if i.name == '1' %}
+                    <button aria-current="true" aria-label="Slide {{forloop.counter}}" class="active"
+                            data-bs-slide-to="{{forloop.counter0}}" data-bs-target="#carouselExampleIndicators"
+                            type="button">
+                    </button>
+                    {% else %}
+                    <button aria-label="Slide {{forloop.counter}}" data-bs-slide-to="{{forloop.counter0}}"
+                            data-bs-target="#carouselExampleIndicators"
+                            type="button">
+                    </button>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                    {% for i in all_banner_images %}
+                    {% if i.name == '1' %}
+                    <div class="carousel-item active">
+                        <img alt="..." class="d-block w-100 img-fluid" src="{{i.image_url.url}}">
+                    </div>
+                    {% else %}
+                    <div class="carousel-item">
+                        {% if i.image_url %}
+                        <img alt="..." class="d-block w-100 img-fluid" src="{{i.image_url.url}}">
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#carouselExampleIndicators"
+                        type="button">
+                    <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#carouselExampleIndicators"
+                        type="button">
+                    <span aria-hidden="true" class="carousel-control-next-icon"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container-fluid shop-section">
+        <div class="container">
+            <div class="sort-btn">
+                <div class="dropdown">
+                    <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            id="dropdownMenuButton1" type="button">
+                        Categories
+                        <i class="fas fa-sliders-h"></i>
+                    </button>
+                    {% if all_category_to_display %}
+                    <ul aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
+                        {% for i in all_category_to_display %}
+                        <li><a class="dropdown-item" href="{% url 'business_list' category=i.id ar=ar %}">{{i.store_type}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+                {% for i in all_business_in_area_with_category %}
+                <div class="col-6 col-lg-3 p-1">
+                    <div class="card w-100 clear" style="min-height:250px;">
+                        <h6 class="text-center pt-3 pb-3 search_name" style="background-color:#39cba3;">{{i.name}}</h6>
+                        <div class="card-body">
+                            <p class="p-0" style="color:#000; font-size:13px;">{{i.about}}</p>
+                        </div>
+                        {% if request.session.user.area == ar %}
+                            {% if is_address_added %}
+                                <button class="btn btn-secondary" type="button" onclick="window.location.assign('{% url 'new_order' shop=i.id %}')">New Order</button>
+                            {% else %}
+                                <button class="btn btn-secondary" type="button" onclick="alert('Please add your delivery address! You can add from the profile section below');">New Order</button>
+                            {% endif %}
+                        {% else %}
+                            <button class="btn btn-secondary" type="button" onclick="alert('Please change your delivery address to selected area');">New Order</button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'js/common/jquery-3.3.1.min.js' %}"></script>
+<script>
+    $(".search").on("keyup", function () {
+        var v = $.trim($(this).val());
+        var v_cap = capitalizeFirstLetter(v);
+        $(".clear").removeClass("selected_color");
+        $(".clear").each(function () {
+            if ((v_cap && $(this).find('h6.search_name').text().search(v_cap) != -1) || (v && $(this).find('h6.search_name').text().search(v) != -1)) {
+                var content = $(this).find('h6.search_name').text();
+                $(this).addClass('selected_color');
+                document.getElementsByClassName('clear')[0].scrollIntoView();
+            }
+        });
+
+    });
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+</script>
+
+{% endblock %}

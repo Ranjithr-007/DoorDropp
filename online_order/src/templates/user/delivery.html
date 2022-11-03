@@ -1,0 +1,149 @@
+
+{% extends 'user/base_user.html' %}
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="history-section">
+            <form action="{% url 'user_delivery_home' %}" id="idForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="id_date_from">Date From</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input aria-describedby="date-design-prepend" class="form-control" id="id_date_from" name="date_from" type="date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="id_date_to">Date To</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input aria-describedby="date-design-prepend" class="form-control" id="id_date_to" name="date_to" type="date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 form-pd">
+                        <label for="id_status">Status</label>
+                        <select aria-label="Default select example" class="form-select" name="status" id="id_status">
+                            <option value="">Choose..</option>
+                            <option value="1">Placed</option>
+                            <option value="2">Processing</option>
+                            <option value="3">Completed</option>
+                            <option value="4">Failed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="history-btn text-center">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section>
+    {% if all_delivery_orders %}
+    <div class="container">
+        <div class="tree-sction-container">
+            {% for i in all_delivery_orders %}
+                {% if i.status == 3 %}
+                    <a href="{% url 'user_delivery_details' delivery=i.id %}" style="text-decoration:none;">
+                        <div class="tree-section">
+                            <div class="row">
+                                <div class="col-lg-6 col-6">
+                                    <div class="completed-left">
+                                        <h6>{{i.delivery_id}}</h6>
+                                        <h5>{{i.created|date:'j/N/Y'}}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-6">
+                                    <div class="completed-right">
+                                        <h6>{{i.delivery_agent.name}}</h6>
+                                        <div class="com-rgt-btn">
+                                            <button class="btn btn-primary" type="button">Completed</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% elif i.status == 2 %}
+                    <a href="{% url 'user_delivery_details' delivery=i.id %}" style="text-decoration:none;">
+                        <div class="tree-section">
+                            <div class="row">
+                                <div class="col-lg-6 col-6">
+                                    <div class="ongoing-left">
+                                        <h6>{{i.delivery_id}}</h6>
+                                        <h5>{{i.created|date:'j/N/Y'}}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-6">
+                                    <div class="ongoing-right">
+                                        <h6>{{i.delivery_agent.name}}</h6>
+                                        <div class="ongoing-btn">
+                                            <button class="btn btn-primary" type="button">On Going</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% elif i.status == 4 %}
+                    <a href="{% url 'user_delivery_details' delivery=i.id %}" style="text-decoration:none;">
+                        <div class="tree-section">
+                            <div class="row">
+                                <div class="col-lg-6 col-6">
+                                    <div class="failed-left">
+                                        <h6>{{i.delivery_id}}</h6>
+                                        <h5>{{i.created|date:'j/N/Y'}}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-6">
+                                    <div class="failed-right">
+                                        <h6>{{i.common_user.name}}</h6>
+                                        <div class="failed-btn">
+                                            <button class="btn btn-primary" type="button">Failed</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% elif i.status == 1 %}
+                    <a href="{% url 'user_delivery_details' delivery=i.id %}" style="text-decoration:none;">
+                        <div class="tree-section">
+                            <div class="row">
+                                <div class="col-lg-6 col-6">
+                                    <div class="ongoing-left">
+                                        <h6>{{i.delivery_id}}</h6>
+                                        <h5>{{i.created|date:'j/N/Y'}}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-6">
+                                    <div class="ongoing-right">
+                                        <h6>{{i.delivery_agent.name}}</h6>
+                                        <div class="ongoing-btn">
+                                            <button class="btn btn-primary" type="button">Processing</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+{% endblock %}
